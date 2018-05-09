@@ -1,6 +1,6 @@
 {
     "name": "Caddy",
-    "version": "0.10.10-2",
+    "version": "0.10.10-3",
     "slug": "caddy",
     "description": "Caddy",
     "url": "https://github.com/Taapie/hassio-addons/tree/master/caddy",

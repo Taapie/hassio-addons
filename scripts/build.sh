@@ -11,6 +11,6 @@ for addon in "$@"; do
       docker run --rm --privileged -v ~/.docker:/root/.docker -v $(pwd)/../${addon}:/data homeassistant/amd64-builder ${archs} -t /data --no-cache
       echo "done"
    else
-      echo "skipped - no important change in commit range"
+      echo "skipped - no important change found for this addon"
    fi
 done
