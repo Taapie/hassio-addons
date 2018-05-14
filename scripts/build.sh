@@ -9,7 +9,9 @@ for addon in "$@"; do
          archs=$(jq -r '.arch // ["armhf", "amd64", "aarch64", "i386"] | [.[] | "--" + .] | join(" ")' ${addon}/config.json)
       fi
 
-      docker run --rm --privileged -v ~/.docker:/root/.docker -v $(pwd)/${addon}:/data homeassistant/amd64-builder ${archs} -t /data --no-cache
+      for arch in "${archs}"; do
+         docker run --rm --privileged -v ~/.docker:/root/.docker -v $(pwd)/${addon}:/data homeassistant/amd64-builder ${arch} -t /data --no-cache
+      done
    else
       echo "skipped - no important change found for this addon"
    fi
