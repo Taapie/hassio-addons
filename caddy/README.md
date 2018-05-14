@@ -1,5 +1,5 @@
 # Caddy Proxy addon for hass.io
-[![Build Status](https://travis-ci.org/bestlibre/hassio-addons.svg?branch=master)](https://travis-ci.org/bestlibre/hassio-addons)[![](https://images.microbadger.com/badges/version/bestlibre/armhf-caddy-proxy.svg)](https://microbadger.com/images/bestlibre/armhf-caddy-proxy "Get your own version badge on microbadger.com")
+[![Build Status](https://travis-ci.org/Taapie/hassio-addons.svg?branch=master)](https://travis-ci.org/Taapie/hassio-addons)[![](https://images.microbadger.com/badges/version/Taapie/armhf-caddy.svg)](https://microbadger.com/images/Taapie/armhf-caddy "Get your own version badge on microbadger.com")
 
 ## Description
 
@@ -14,7 +14,7 @@ This is a shortcut to set a proxy for homeassistant. If this option is set to "h
 
 ### vhosts (list)
 
-This list describe all the virtual host to be proxified.
+This list describes all the virtual host to be proxified.
 
 #### vhost (string)
 
@@ -26,7 +26,7 @@ Internal port (ie 8123 for homeassistant, 3000 for grafana)
 
 #### remote (str)
 
-Ip or url for the proxified server. If not set default to 172.17.0.1 (docker host).
+Ip or url for the proxified server. If not set defaults to 172.17.0.1 (docker host).
 
 #### insecure (bool)
 
