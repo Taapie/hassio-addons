@@ -18,10 +18,13 @@ RUN apk add --no-cache -U --virtual .build-deps \
 	tar \
  && apk add -U --no-cache \
         jq \
- && go get github.com/quantumew/mustache-cli \
+ && apk del .build-deps
+
+RUN go get github.com/quantumew/mustache-cli \
  && cp $GOPATH/bin/* /usr/local/bin/ \
- && rm -rf $GOPATH \
- && CADDY_VERSION=v${BUILD_VERSION%-*} \
+ && rm -rf $GOPATH
+
+RUN CADDY_VERSION=v${BUILD_VERSION%-*} \
  && if [ ${BUILD_ARCH} == "armhf" ]; then caddyarch=arm7;\
     elif [ ${BUILD_ARCH} == "amd64" ]; then caddyarch=amd64;\
     elif [ ${BUILD_ARCH} == "i386" ]; then caddyarch=386;\
@@ -32,8 +35,7 @@ RUN apk add --no-cache -U --virtual .build-deps \
  && curl --silent --show-error --fail --location --header "Accept: application/tar+gzip, application/x-gzip, application/octet-stream" -o - \
       "$caddyurl" \
     | tar --no-same-owner -C /usr/local/bin/ -xz caddy \
- && chmod 0755 /usr/local/bin/caddy \
- && apk del .build-deps
+ && chmod 0755 /usr/local/bin/caddy 
 
 # Copy data
 COPY run.sh /
