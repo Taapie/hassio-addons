@@ -1,11 +1,11 @@
-# Caddy Proxy addon for hass.io
+# Caddy addon for hass.io
 [![Build Status](https://travis-ci.org/Taapie/hassio-addons.svg?branch=master)](https://travis-ci.org/Taapie/hassio-addons)[![](https://images.microbadger.com/badges/version/Taapie/armhf-caddy.svg)](https://microbadger.com/images/Taapie/armhf-caddy "Get your own version badge on microbadger.com")
 
 ## Description
 
-This addon provide a [Caddy](https://caddyserver.com/) Proxy with multiple vhost support and automatic ssl (obtention and renewal). It should be a easier option than the nginx_proxy and certbot addons.
+This addon provides a [Caddy](https://caddyserver.com/) server with multiple vhost support and automatic ssl (obtention and renewal). 
 
-The simplier way to use it is just to set your external address in the homeassistant field.
+The simplest way to use this is to just set your external address in the homeassistant field.
 
 ## Configuration
 ### homeassistant (str)
