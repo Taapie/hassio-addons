@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 email=$(jq -r '.email' /data/options.json)
-https_only=$(jq -r 'if .disable_http_chalenge? then "-disable-http-challenge" else "" end' /data/options.json)
+https_only=$(jq -r 'if .disable_http_challenge? then "-disable-http-challenge" else "" end' /data/options.json)
 homeassistant=$(jq -r '.homeassistant // empty' /data/options.json)
 
 if [ -n "$homeassistant" ];

@@ -28,6 +28,10 @@ Internal port (ie 8123 for homeassistant, 3000 for grafana)
 
 Ip or url for the proxified server. If not set default to 172.17.0.1 (docker host).
 
+#### insecure (bool)
+
+Indicates if the remote is insecure and should not be checked for a secure connection. If not set defaults to False.
+
 #### user (str)
 
 Username to be used with basicauth. `pwd` (see below) must also be set.

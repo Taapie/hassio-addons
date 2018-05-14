@@ -18,13 +18,14 @@
 	    {"vhost": "str",
 	     "remote": "str?",
 	     "port": "str",
+             "insecure": "bool?",
 	     "directory": "str?",
 	     "user": "str?",
 	     "pwd": "str?"
 	    }
 	],
 	"email": "email",
-	"disable_http_chalenge": "bool?",
+	"disable_http_challenge": "bool?",
 	"raw_config": [{"line": "str"}],
 	"homeassistant": "str?"
     },
