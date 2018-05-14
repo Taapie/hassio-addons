@@ -16,13 +16,12 @@ RUN apk add --no-cache -U --virtual .build-deps \
 	git \
 	go \
 	tar \
- && apk add -U --no-cache \
-        jq \
- && apk del .build-deps
+ && apk add -U --no-cache jq
 
-RUN go get github.com/quantumew/mustache-cli \
+RUN go get -u github.com/quantumew/mustache-cli \
  && cp $GOPATH/bin/* /usr/local/bin/ \
- && rm -rf $GOPATH
+ && rm -rf $GOPATH \
+ && apk del .build-deps
 
 RUN CADDY_VERSION=v${BUILD_VERSION%-*} \
  && if [ ${BUILD_ARCH} == "armhf" ]; then caddyarch=arm7;\
