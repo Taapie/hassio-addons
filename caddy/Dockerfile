@@ -18,7 +18,7 @@ RUN apk add --no-cache -U --virtual .build-deps \
 	tar \
  && apk add -U --no-cache \
         jq \
- && go get -u github.com/quantumew/mustache-cli \
+ && go get github.com/quantumew/mustache-cli \
  && cp $GOPATH/bin/* /usr/local/bin/ \
  && rm -rf $GOPATH \
  && CADDY_VERSION=v${BUILD_VERSION%-*} \
