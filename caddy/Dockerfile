@@ -18,7 +18,7 @@ RUN apk add --no-cache -U --virtual .build-deps \
 	tar \
  && apk add -U --no-cache jq
 
-RUN go get -u github.com/quantumew/mustache-cli \
+RUN go get -u -v github.com/quantumew/mustache-cli \
  && cp $GOPATH/bin/* /usr/local/bin/ \
  && rm -rf $GOPATH \
  && apk del .build-deps
