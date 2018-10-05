@@ -1,0 +1,26 @@
+{{#vhosts}}
+{{vhost}} {
+{{#directory}}
+    root {{directory}}
+{{/directory}}
+{{^directory}}
+    proxy / {{#remote}}{{remote}}{{/remote}}{{^remote}}172.17.0.1{{/remote}}:{{port}} {
+      transparent
+      websocket
+    {{#insecure}}
+      insecure_skip_verify
+    {{/insecure}}
+    }
+{{/directory}}
+{{#user}}
+  {{#pwd}}
+    basicauth / {{user}} {{pwd}}
+  {{/pwd}}
+{{/user}}
+    log stdout
+    errors stdout
+}
+{{/vhosts}}
+{{#raw_config}}
+{{line}}
+{{/raw_config}}
