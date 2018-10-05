@@ -1,0 +1,16 @@
+{
+    "name": "Find3",
+    "version": "3",
+    "slug": "find",
+    "description": "Find",
+    "url": "https://github.com/Taapie/hassio-addons/tree/master/find3",
+    "startup": "system",
+    "boot": "auto",
+    "image": "taapie/{arch}-find3",
+    "options": {
+    },
+    "schema": {
+    },
+    "ports": {"11883/tcp": 1883, "8003/tcp": 8003},
+    "arch": ["armhf", "amd64"]
+}
