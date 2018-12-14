@@ -6,9 +6,9 @@ for addon in "$@"; do
    echo -n "Building addon ${addon}... "
    #if [ -z ${TRAVIS_COMMIT_RANGE} ] || git diff --name-only ${TRAVIS_COMMIT_RANGE} | grep -v README.md | grep -q ${addon}; then
       echo ""
-      #if [ -z "$archs" ]; then
-      #   archs=$(jq -r '.arch // ["armhf", "amd64", "aarch64"] | [.[] | "--" + .] | join(" ")' ${addon}/config.json)
-      #fi
+      if [ -z "$archs" ]; then
+         archs=$(jq -r '.arch // ["armhf", "amd64", "aarch64"] | join(" ")' ${addon}/config.json)
+      fi
 
       for arch in ${archs}; do
          echo "Building for architecture: ${arch}..."
