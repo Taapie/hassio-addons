@@ -9,10 +9,7 @@ for addon in "$@"; do
          archs=$(jq -r '.arch // ["armhf", "amd64", "aarch64"] | join(" ")' ${addon}/config.json)
       fi
 
-      echo "Building for ${archs}... "
-
       for arch in ${archs}; do
-         echo "Building for architecture: ${arch}..."
          docker run --rm --privileged -v ~/.docker:/root/.docker -v $(pwd)/${addon}:/data homeassistant/amd64-builder --${arch} -t /data --no-cache
       done
    #else
