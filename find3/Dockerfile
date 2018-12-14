@@ -26,9 +26,11 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-instal
 	esac; \
 	\
 	url="https://golang.org/dl/go${GOLANG_VERSION}.${goRelArch}.tar.gz"; \
-	wget -O go.tgz "$url"; \
+	wget -nv -O go.tgz "$url"; \
 	echo "${goRelSha256} *go.tgz" | sha256sum -c -; \
 	tar -C /usr/local -xzf go.tgz; \
+    ls -als /usr/local \
+    ls -als /usr/local/go \
 	rm go.tgz; \
 	\
 	if [ "$goRelArch" = 'src' ]; then \
