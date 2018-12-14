@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+set -x
 archs="${ARCHS}"
 for addon in "$@"; do
    echo -n "Building addon ${addon}... "
