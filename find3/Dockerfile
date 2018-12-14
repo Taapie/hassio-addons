@@ -29,8 +29,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-instal
 	wget -nv -O go.tgz "$url"; \
 	echo "${goRelSha256} *go.tgz" | sha256sum -c -; \
 	tar -C /usr/local -xzf go.tgz; \
-    ls -als /usr/local \
-    ls -als /usr/local/go \
+    ls -als /usr/local/go; \
+    ls -als /usr/local/go/bin; \
 	rm go.tgz; \
 	\
 	if [ "$goRelArch" = 'src' ]; then \
@@ -42,6 +42,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-instal
 	fi; \
 	\
 	export PATH="/usr/local/go/bin:$PATH"; \
+	which go; \
 	go version && \
 	mkdir /build && cd /build && \
 	git clone https://github.com/schollz/find3 && \
