@@ -12,5 +12,5 @@
     "schema": {
     },
     "ports": {"11883/tcp": 1883, "8003/tcp": 8003},
-    "arch": ["amd64", "armhf"]
+    "arch": ["armhf"]
 }

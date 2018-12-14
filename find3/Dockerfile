@@ -41,8 +41,9 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-instal
 		exit 1; \
 	fi; \
 	\
-	export PATH="/usr/local/go/bin:$PATH"; \
-	which go; \
+	export PATH="/usr/local/go/bin:$PATH"
+
+RUN	which go && \
 	go version && \
 	mkdir /build && cd /build && \
 	git clone https://github.com/schollz/find3 && \
