@@ -6,8 +6,10 @@ for addon in "$@"; do
    #if [ -z ${TRAVIS_COMMIT_RANGE} ] || git diff --name-only ${TRAVIS_COMMIT_RANGE} | grep -v README.md | grep -q ${addon}; then
       echo ""
       if [ -z "$archs" ]; then
-         archs=$(jq -r '.arch // ["armhf", "amd64", "aarch64"] | join(" ")' ${addon}/config.json)
+         archs=$(jq -r '.arch // ["armhf", "amd64", "aarch64"] | join(" ")' ${pwd}/${addon}/config.json)
       fi
+
+      echo -n "Building for ${archs}... "
 
       for arch in ${archs}; do
          echo "Building for architecture: ${arch}..."
