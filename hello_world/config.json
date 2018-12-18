@@ -1,0 +1,25 @@
+{
+  "name": "Hello world",
+  "version": "0.2",
+  "slug": "hello_world",
+  "description": "My first real add-on!",
+  "startup": "before",
+  "boot": "auto",
+  "options": {
+    "beer": true,
+    "wine": true,
+    "liquor": false,
+    "name": "world",
+    "year": 2017
+  },
+  "schema": {
+    "beer": "bool",
+    "wine": "bool",
+    "liquor": "bool",
+    "name": "str",
+    "year": "int"
+  },
+  "ports": {
+    "8000/tcp": 8000
+  }
+}
