@@ -6,6 +6,7 @@
   "url": "https://github.com/Taapie/hassio-addons/tree/master/find3",
   "startup": "system",
   "boot": "auto",
+  "apparmor": true,
   "image": "taapie/{arch}-find3",
   "options": {
   },
