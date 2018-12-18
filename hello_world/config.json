@@ -5,6 +5,7 @@
   "description": "My first real add-on!",
   "startup": "before",
   "boot": "auto",
+  "image": "taapie/{arch}-hello-world",
   "options": {
     "beer": true,
     "wine": true,
