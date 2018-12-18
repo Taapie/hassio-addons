@@ -44,6 +44,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-instal
 	mkdir /data && \
 	mkdir /app && \
 	echo '#!/bin/bash\n\
+echo "Started"\
 pkill -9 mosquitto\n\
 cp -R -u -p /app/mosquitto_config /data\n\
 mosquitto -d -c /data/mosquitto_config/mosquitto.conf\n\
