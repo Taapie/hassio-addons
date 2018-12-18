@@ -4,8 +4,8 @@ archs="${ARCHS}"
 for addon in "$@"; do
    echo "Building addon ${addon}... "
    #if [ -z ${TRAVIS_COMMIT_RANGE} ] || git diff --name-only ${TRAVIS_COMMIT_RANGE} | grep -v README.md | grep -q ${addon}; then
-      echo ""
       if [ -z "$archs" ]; then
+         echo "Checking for archs in ${addon}/config.json..."
          archs=$(jq -r '.arch // ["armhf", "amd64", "aarch64"] | join(" ")' ${addon}/config.json)
       fi
 
