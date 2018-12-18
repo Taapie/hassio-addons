@@ -3,7 +3,7 @@ FROM ubuntu:18.04
 ARG BUILD_VERSION
 ARG BUILD_ARCH
 
-ENV GOLANG_VERSION 1.11.4
+ENV GOLANG_VERSION 1.11
 ENV PATH="/usr/local/go/bin:/usr/local/work/bin:${PATH}"
 ENV GOPATH /usr/local/work
 ENV GO111MODULE=on
@@ -94,8 +94,7 @@ pid_file /data/mosquitto_config/pid\n'\
 	echo "rm go" && rm -rf /usr/local/go* && \
 	echo "rm perl" && rm -rf /usr/share/perl* && \
 	echo "rm build" && rm -rf /build* && \
-	echo "rm doc" && rm -rf /usr/share/doc* 
+	echo "rm doc" && rm -rf /usr/share/doc*
 
 WORKDIR /app
 CMD ["/app/startup.sh"]
-

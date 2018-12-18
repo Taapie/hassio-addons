@@ -10,6 +10,7 @@ for addon in "$@"; do
       fi
 
       for arch in ${archs}; do
+         echo "============================================================================="
          docker run --rm --privileged -v ~/.docker:/root/.docker -v $(pwd)/${addon}:/data homeassistant/amd64-builder --${arch} -t /data --no-cache
       done
    #else
