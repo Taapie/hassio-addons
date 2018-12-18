@@ -1,8 +1,5 @@
 FROM ubuntu:18.04
 
-ARG BUILD_VERSION
-ARG BUILD_ARCH
-
 ENV GOLANG_VERSION 1.11
 ENV PATH="/usr/local/go/bin:/usr/local/work/bin:${PATH}"
 ENV GOPATH /usr/local/work
@@ -14,7 +11,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-instal
 	set -eux; \
 	\
 # this "case" statement is generated via "update.sh"
-	case "${BUILD_ARCH}" in \
+	dpkgArch="$(dpkg --print-architecture)"; \
+	case "${dpkgArch##*-}" in \
 		amd64) goRelArch='linux-amd64'; goRelSha256='b3fcf280ff86558e0559e185b601c9eade0fd24c900b4c63cd14d1d38613e499' ;; \
 		armhf) goRelArch='linux-armv6l'; goRelSha256='8ffeb3577d8ca5477064f1cb8739835973c866487f2bf81df1227eaa96826acd' ;; \
 		arm64) goRelArch='linux-arm64'; goRelSha256='e4853168f41d0bea65e4d38f992a2d44b58552605f623640c5ead89d515c56c9' ;; \
@@ -22,15 +20,13 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-instal
 		ppc64el) goRelArch='linux-ppc64le'; goRelSha256='e874d617f0e322f8c2dda8c23ea3a2ea21d5dfe7177abb1f8b6a0ac7cd653272' ;; \
 		s390x) goRelArch='linux-s390x'; goRelSha256='c113495fbb175d6beb1b881750de1dd034c7ae8657c30b3de8808032c9af0a15' ;; \
 		*) goRelArch='src'; goRelSha256='afc1e12f5fe49a471e3aae7d906c73e9d5b1fdd36d52d72652dde8f6250152fb'; \
-			echo >&2; echo >&2 "warning: current architecture (${BUILD_ARCH}) does not have a corresponding Go binary release; will be building from source"; echo >&2 ;; \
+			echo >&2; echo >&2 "warning: current architecture ($dpkgArch) does not have a corresponding Go binary release; will be building from source"; echo >&2 ;; \
 	esac; \
 	\
 	url="https://golang.org/dl/go${GOLANG_VERSION}.${goRelArch}.tar.gz"; \
 	wget -nv -O go.tgz "$url"; \
 	echo "${goRelSha256} *go.tgz" | sha256sum -c -; \
 	tar -C /usr/local -xzf go.tgz; \
-    ls -als /usr/local/go; \
-    ls -als /usr/local/go/bin; \
 	rm go.tgz; \
 	\
 	if [ "$goRelArch" = 'src' ]; then \
@@ -41,9 +37,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-instal
 		exit 1; \
 	fi; \
 	\
-	export PATH="/usr/local/go/bin:$PATH"
-
-RUN	/usr/local/go/bin/go version && \
+	export PATH="/usr/local/go/bin:$PATH"; \
+	go version && \
 	mkdir /build && cd /build && \
 	git clone https://github.com/schollz/find3 && \
 	mkdir /data && \
