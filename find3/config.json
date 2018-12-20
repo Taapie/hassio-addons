@@ -9,11 +9,22 @@
   "apparmor": true,
   "image": "taapie/{arch}-find3",
   "options": {
+    "mosquitto": {
+      "hostname": "homeassistant",
+      "port": 1883,
+      "username": "admin",
+      "password": ""
+    }
   },
   "schema": {
+    "mosquitto": {
+      "hostname": "str",
+      "port": "int",
+      "username": "str",
+      "password": "str"
+    }
   },
   "ports": {
-      "11883/tcp": 1883,
       "8003/tcp": 8003
   }
 }

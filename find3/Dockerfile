@@ -6,7 +6,7 @@ ENV PATH="/usr/local/go/bin:/usr/local/work/bin:${PATH}"
 RUN apt-get update && \
     apt-get -y upgrade && \
     DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y wget git libc6-dev make pkg-config g++ \
-                                           gcc mosquitto-clients mosquitto python3 python3-dev python3-pip \
+                                           gcc mosquitto-clients python3 python3-dev python3-pip \
                                            python3-setuptools python3-wheel supervisor dos2unix && \
     rm -rf /var/lib/apt/lists/*
 
@@ -37,11 +37,7 @@ RUN	dpkgArch="$(dpkg --print-architecture)" && \
 RUN mkdir /usr/local/work && \
 	mkdir /data && \
 	mkdir /app && \
-	mkdir /app/mosquitto_config && \
-	touch /app/mosquitto_config/acl && \
-	touch /app/mosquitto_config/passwd
-
-RUN	mkdir /build && \
+	mkdir /build && \
     cd /build && \
     git clone https://github.com/schollz/find3 && \
 	cd /build/find3/server/main  && \
@@ -64,12 +60,10 @@ RUN	rm -rf /usr/local/work/src && \
 
 COPY files/startup.sh /app/startup.sh
 COPY files/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY files/mosquitto.conf /app/mosquitto_config/mosquitto.conf
 
 RUN	chmod +x /app/startup.sh && \
     dos2unix /app/startup.sh && \
-    dos2unix /etc/supervisor/conf.d/supervisord.conf && \
-    dos2unix /app/mosquitto_config/mosquitto.conf
+    dos2unix /etc/supervisor/conf.d/supervisord.conf
 
 WORKDIR /app
 CMD ["/app/startup.sh"]
