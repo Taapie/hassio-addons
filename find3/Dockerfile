@@ -4,7 +4,6 @@ ENV GOLANG_VERSION 1.11
 ENV PATH="/usr/local/go/bin:/usr/local/work/bin:${PATH}"
 
 RUN apt-get update && \
-    apt-get -y upgrade && \
     DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y wget git libc6-dev make pkg-config g++ \
                                            gcc mosquitto-clients python3 python3-dev python3-pip \
                                            python3-setuptools python3-wheel supervisor dos2unix && \
