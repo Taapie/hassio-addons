@@ -7,7 +7,7 @@ for addon in "$@"; do
    if [[ -z ${TRAVIS_COMMIT_RANGE} ]] || git diff --name-only ${TRAVIS_COMMIT_RANGE} | grep -v README.md | grep -q ${addon}; then
       if [[ -z "$archs" ]]; then
          echo "Checking for archs in ${addon}/config.json..."
-         archs=$(jq -r '.arch // ["armhf", "amd64", "aarch64"] | join(" ")' ${addon}/config.json)
+         archs=$(jq -r '.arch // ["armhf"] | join(" ")' ${addon}/config.json)
       fi
 
       echo "Using archs: ${archs}"

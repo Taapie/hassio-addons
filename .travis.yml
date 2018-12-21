@@ -5,7 +5,7 @@ services:
 before_install:
   - sudo apt-get install jq
 env:
-  - ADDON="find3 hello_world"
+  - ADDON="find3"
 script:
   - docker login -u $DOCKER_USER -p $DOCKER_PASS
   - scripts/build.sh $ADDON
