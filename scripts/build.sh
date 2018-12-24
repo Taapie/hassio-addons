@@ -4,7 +4,7 @@ archs="${ARCHS}"
 for addon in "$@"; do
    echo "*****************************************************************************"
    echo "Building addon ${addon}... "
-   if [[ -z ${TRAVIS_COMMIT_RANGE} ]] || git diff --name-only ${TRAVIS_COMMIT_RANGE} | grep -v README.md | grep -q ${addon}; then
+   #if [[ -z ${TRAVIS_COMMIT_RANGE} ]] || git diff --name-only ${TRAVIS_COMMIT_RANGE} | grep -v README.md | grep -q ${addon}; then
       if [[ -z "$archs" ]]; then
          echo "Checking for archs in ${addon}/config.json..."
          archs=$(jq -r '.arch // ["armhf"] | join(" ")' ${addon}/config.json)
@@ -22,7 +22,7 @@ for addon in "$@"; do
 
       echo "Reverting changes..."
       mv ${addon}/config.json.bak ${addon}/config.json
-   else
-      echo "skipped - no important change found for this addon"
-   fi
+   #else
+   #   echo "skipped - no important change found for this addon"
+   #fi
 done
