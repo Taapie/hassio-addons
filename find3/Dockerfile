@@ -1,5 +1,7 @@
 FROM ubuntu:18.04
 
+ARG BUILD_ARCH
+
 ENV GOLANG_VERSION 1.11
 ENV PATH="/usr/local/go/bin:/usr/local/work/bin:${PATH}"
 
@@ -10,7 +12,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 RUN	dpkgArch="$(dpkg --print-architecture)" && \
-	case "${dpkgArch##*-}" in \
+	case "${BUILD_ARCH}" in \
 		amd64)   goRelArch='linux-amd64'; \
 		         goRelSha256='b3fcf280ff86558e0559e185b601c9eade0fd24c900b4c63cd14d1d38613e499' ;; \
 		armhf)   goRelArch='linux-armv6l'; \
@@ -23,7 +25,7 @@ RUN	dpkgArch="$(dpkg --print-architecture)" && \
 		         goRelSha256='e874d617f0e322f8c2dda8c23ea3a2ea21d5dfe7177abb1f8b6a0ac7cd653272' ;; \
 		s390x)   goRelArch='linux-s390x'; \
 		         goRelSha256='c113495fbb175d6beb1b881750de1dd034c7ae8657c30b3de8808032c9af0a15' ;; \
-		*)       echo >&2 "error: current architecture ($dpkgArch) is not supported"; \
+		*)       echo >&2 "error: current architecture ($BUILD_ARCH} is not supported"; \
 		         exit 1 ;; \
 	esac && \
     url="https://golang.org/dl/go${GOLANG_VERSION}.${goRelArch}.tar.gz" && \
