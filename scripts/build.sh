@@ -10,6 +10,7 @@ for addon in "$@"; do
          archs=$(jq -r '.arch // ["armhf"] | join(" ")' ${addon}/config.json)
       fi
 
+      echo "Replacing {DATE}..."
       sed -i.bak "s/{DATE}/$(date '+%Y%m%d')/g" ${addon}/config.json
 
       echo "Using archs: ${archs}"
@@ -18,6 +19,9 @@ for addon in "$@"; do
          echo "============================================================================="
          docker run --rm --privileged -v ~/.docker:/root/.docker -v $(pwd)/${addon}:/data homeassistant/amd64-builder --${arch} -t /data --no-cache
       done
+
+      echo "Reverting changes..."
+      mv ${addon}/config.json.bak ${addon}/config.json
    else
       echo "skipped - no important change found for this addon"
    fi
