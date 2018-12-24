@@ -1,6 +1,6 @@
 {
   "name": "Find3",
-  "version": "0.1.2",
+  "version": "0.1.2-{DATE}",
   "slug": "find3",
   "description": "Find3",
   "url": "https://github.com/Taapie/hassio-addons/tree/master/find3",

@@ -10,6 +10,8 @@ for addon in "$@"; do
          archs=$(jq -r '.arch // ["armhf"] | join(" ")' ${addon}/config.json)
       fi
 
+      sed -i.bak "s/{DATE}/$(date '+%Y%m%d')/g" ${addon}/config.json
+
       echo "Using archs: ${archs}"
 
       for arch in ${archs}; do

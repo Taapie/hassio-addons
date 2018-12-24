@@ -3,7 +3,7 @@ sudo: required
 services:
   - docker
 before_install:
-  - sudo apt-get install jq
+  - sudo apt-get install jq sed
 env:
   - ADDON="find3"
 script:
