@@ -7,7 +7,7 @@ for addon in "$@"; do
    #if [[ -z ${TRAVIS_COMMIT_RANGE} ]] || git diff --name-only ${TRAVIS_COMMIT_RANGE} | grep -v README.md | grep -q ${addon}; then
       if [[ -z "$archs" ]]; then
          echo "Checking for archs in ${addon}/config.json..."
-         archs=$(jq -r '.arch // ["armhf"] | join(" ")' ${addon}/config.json)
+         archs=$(jq -r '.arch // ["armhf", "amd64", "aarch64", "i386"] | [.[] | "--" + .] | join(" ")' ${addon}/config.json)
       fi
 
       echo "Replacing {DATE}..."
@@ -15,10 +15,8 @@ for addon in "$@"; do
 
       echo "Using archs: ${archs}"
 
-      for arch in ${archs}; do
-         echo "============================================================================="
-         docker run --rm --privileged -v ~/.docker:/root/.docker -v $(pwd)/${addon}:/data homeassistant/${arch}-builder --${arch} -t /data --no-cache
-      done
+      echo "============================================================================="
+      docker run --rm --privileged -v ~/.docker:/root/.docker -v $(pwd)/${addon}:/data homeassistant/amd64-builder ${archs} -t /data --no-cache
 
       echo "Reverting changes..."
       mv ${addon}/config.json.bak ${addon}/config.json

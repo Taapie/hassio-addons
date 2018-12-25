@@ -1,6 +1,6 @@
 {
   "name": "Find3",
-  "version": "0.1.2-{DATE}",
+  "version": "0.1.2-20181225",
   "slug": "find3",
   "description": "Find3",
   "url": "https://github.com/Taapie/hassio-addons/tree/master/find3",
@@ -12,7 +12,7 @@
     "mosquitto": {
       "hostname": "homeassistant",
       "port": 1883,
-      "username": "admin",
+      "username": "",
       "password": ""
     }
   },

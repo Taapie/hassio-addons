@@ -1,70 +1,136 @@
-FROM ubuntu:18.04
+ARG BUILD_FROM
+FROM $BUILD_FROM
 
+ARG BUILD_VERSION
 ARG BUILD_ARCH
 
-ENV GOLANG_VERSION 1.11
-ENV PATH="/usr/local/go/bin:/usr/local/work/bin:${PATH}"
+ENV LANG C.UTF-8
 
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y wget git libc6-dev make pkg-config g++ \
-                                           gcc mosquitto-clients python3 python3-dev python3-pip \
-                                           python3-setuptools python3-wheel supervisor dos2unix && \
-    rm -rf /var/lib/apt/lists/*
+ENV GOLANG_VERSION 1.11.4
 
-RUN	dpkgArch="$(dpkg --print-architecture)" && \
-	case "${BUILD_ARCH}" in \
-		amd64)   goRelArch='linux-amd64'; \
-		         goRelSha256='b3fcf280ff86558e0559e185b601c9eade0fd24c900b4c63cd14d1d38613e499' ;; \
-		armhf)   goRelArch='linux-armv6l'; \
-		         goRelSha256='8ffeb3577d8ca5477064f1cb8739835973c866487f2bf81df1227eaa96826acd' ;; \
-		arm64)   goRelArch='linux-arm64'; \
-		         goRelSha256='e4853168f41d0bea65e4d38f992a2d44b58552605f623640c5ead89d515c56c9' ;; \
-		i386)    goRelArch='linux-386'; \
-		         goRelSha256='1a91932b65b4af2f84ef2dce10d790e6a0d3d22c9ea1bdf3d8c4d9279dfa680e' ;; \
-		ppc64el) goRelArch='linux-ppc64le'; \
-		         goRelSha256='e874d617f0e322f8c2dda8c23ea3a2ea21d5dfe7177abb1f8b6a0ac7cd653272' ;; \
-		s390x)   goRelArch='linux-s390x'; \
-		         goRelSha256='c113495fbb175d6beb1b881750de1dd034c7ae8657c30b3de8808032c9af0a15' ;; \
-		*)       echo >&2 "error: current architecture ($BUILD_ARCH} is not supported"; \
-		         exit 1 ;; \
-	esac && \
-    url="https://golang.org/dl/go${GOLANG_VERSION}.${goRelArch}.tar.gz" && \
-	wget -nv -O go.tgz "$url" && \
-	echo "${goRelSha256} *go.tgz" | sha256sum -c - && \
-	tar -C /usr/local -xzf go.tgz && \
-	rm go.tgz && \
-	go version
+ENV GOLANG_BASE_PATH="/usr/local"
+ENV GOLANG_DIR_NAME="go"
+ENV GOLANG_PATH="$GOLANG_BASE_PATH/$GOLANG_DIR_NAME"
 
-RUN mkdir /usr/local/work && \
-	mkdir /data && \
-	mkdir /app && \
-	mkdir /build && \
-    cd /build && \
-    git clone https://github.com/schollz/find3 && \
-	cd /build/find3/server/main  && \
-	go build -v && \
-	mv /build/find3/server/main /app/main && \
-	cd /build/find3/server/ai && \
-	python3 -m pip install -r requirements.txt && \
-	mv /build/find3/server/ai /app/ai
+ENV GOPATH="/go"
 
-RUN	rm -rf /usr/local/work/src && \
-	apt-get remove -y --auto-remove git libc6-dev pkg-config g++ gcc && \
-	apt-get autoclean && \
-	apt-get clean && \
-	apt-get autoremove && \
-	rm -rf ~/.local/share/Trash/* && \
-	rm -rf /usr/local/go* && \
-	rm -rf /usr/share/perl* && \
-	rm -rf /build* && \
-	rm -rf /usr/share/doc*
+ENV PATH="$GOPATH/bin:$GOLANG_PATH/bin:${PATH}"
 
-COPY files/startup.sh /app/startup.sh
-COPY files/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+# The following builds Golang
+RUN apk add --no-cache --virtual .build-go-deps \
+        bash \
+        gcc \
+        musl-dev \
+        openssl \
+	    go \
+	    curl \
+	    tar \
+ && export \
+		GOROOT_BOOTSTRAP="$(go env GOROOT)" \
+		GOOS="$(go env GOOS)" \
+		GOARCH="$(go env GOARCH)" \
+		GOHOSTOS="$(go env GOHOSTOS)" \
+		GOHOSTARCH="$(go env GOHOSTARCH)" \
+ && apkArch="$(apk --print-arch)" \
+ &&	case "$apkArch" in \
+		armhf) export GOARM='6' ;; \
+		x86)   export GO386='387' ;; \
+	esac \
+ && go_url="https://golang.org/dl/go${GOLANG_VERSION}.src.tar.gz" \
+ &&	curl --silent --show-error --fail --location \
+         --header "Accept: application/tar+gzip, application/x-gzip, application/octet-stream" \
+         -o - "$go_url" \
+    | tar --no-same-owner -C "$GOLANG_BASE_PATH" -xz "$GOLANG_DIR_NAME" \
+ && cd "$GOLANG_PATH/src" \
+ && ./make.bash \
+ && rm -rf "$GOLANG_PATH/pkg/bootstrap" "$GOLANG_PATH/pkg/obj" \
+ && apk del .build-go-deps \
+ && mkdir -p "$GOPATH/src" "$GOPATH/bin" \
+ && chmod -R 777 "$GOPATH" \
+ && go version
 
-RUN	chmod +x /app/startup.sh && \
-    dos2unix /app/startup.sh && \
-    dos2unix /etc/supervisor/conf.d/supervisord.conf
+# The following builds Find3
+RUN apk add --no-cache \
+        git \
+        python3 \
+        g++ \
+        mosquitto-clients \
+ && python3 -m ensurepip \
+ && rm -r /usr/lib/python*/ensurepip \
+ && pip3 install --upgrade pip setuptools
 
-WORKDIR /app
-CMD ["/app/startup.sh"]
+RUN go get -u -v github.com/schollz/find3/server/...
+
+RUN apk add --no-cache \
+        freetype-dev \
+        libpng-dev \
+        lapack-dev \
+        python3-dev \
+        gfortran \
+ && cd $GOPATH/src/github.com/schollz/find3/server/ai \
+ && python3 -m pip install numpy==1.15.1 scipy==1.1.0
+
+RUN cd $GOPATH/src/github.com/schollz/find3/server/ai \
+ && python3 -m pip install -r requirements.txt
+
+RUN apk add --no-cache \
+        make
+
+RUN cd $GOPATH/src/github.com/schollz/find3/server/main \
+ && go build -v
+
+RUN apk add --no-cache \
+        supervisor
+
+#RUN apk add --no-cache --virtual .build-find3-deps \
+#        git \
+#        make \
+#        libc-dev \
+#        pkgconfig \
+#        g++ \
+#        gcc \
+#        freetype-dev \
+#        libpng \
+#        python3-dev \
+# && apk add --no-cache \
+#        mosquitto-clients \
+#        python3 \
+# && python3 -m ensurepip \
+# && rm -r /usr/lib/python*/ensurepip \
+# && pip3 install --upgrade pip setuptools \
+# && mkdir /build \
+# && cd /build  \
+# && git clone https://github.com/schollz/find3 \
+# && cd /build/find3/server/main \
+# &&	go build -v \
+# && mkdir /app \
+# &&	mv /build/find3/server/main /app/main
+#
+#RUN cd /build/find3/server/ai \
+# && python3 -m pip install -r requirements.txt \
+# && mv /build/find3/server/ai /app/ai \
+# && apk del .build-find3-deps
+
+# The following installs the tools to run Find3
+#RUN apk add --no-cache \
+#        supervisor
+
+#RUN mkdir /usr/local/work && \
+#	mkdir /data && \
+
+#RUN	rm -rf /usr/local/work/src && \
+#	rm -rf ~/.local/share/Trash/* && \
+#	rm -rf /usr/local/go* && \
+#	rm -rf /usr/share/perl* && \
+#	rm -rf /build* && \
+#	rm -rf /usr/share/doc*
+
+COPY run.sh /
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+RUN	chmod a+x /run.sh
+# && dos2unix -c 7bit /run.sh \
+# && dos2unix /etc/supervisor/conf.d/supervisord.conf
+
+ENTRYPOINT ["/bin/bash", "-c", "echo hello"]
+CMD [""]
