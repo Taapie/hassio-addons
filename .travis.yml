@@ -4,7 +4,7 @@ services:
 before_install:
   - sudo apt-get install jq sed
 env:
-  - ADDON="find3" ARCHS="--armhf"
+  - ADDON="find3" ARCHS="--amd64"
 script:
   - docker login -u $DOCKER_USER -p $DOCKER_PASS
   - chmod a+x build.sh
