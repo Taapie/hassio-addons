@@ -17,14 +17,26 @@ ENV GOPATH="/go"
 ENV PATH="$GOPATH/bin:$GOLANG_PATH/bin:${PATH}"
 
 # The following builds Golang
-RUN apk add --no-cache --virtual .build-go-deps \
+RUN apk add --no-cache \
         bash \
+        supervisor \
+        python3 \
+        mosquitto-clients \
+        make \
+ && apk add --no-cache --virtual .build-deps \
         gcc \
         musl-dev \
         openssl \
 	    go \
 	    curl \
 	    tar \
+        git \
+        g++ \
+        freetype-dev \
+        libpng-dev \
+        lapack-dev \
+        python3-dev \
+        gfortran \
  && export \
 		GOROOT_BOOTSTRAP="$(go env GOROOT)" \
 		GOOS="$(go env GOOS)" \
@@ -44,93 +56,29 @@ RUN apk add --no-cache --virtual .build-go-deps \
  && cd "$GOLANG_PATH/src" \
  && ./make.bash \
  && rm -rf "$GOLANG_PATH/pkg/bootstrap" "$GOLANG_PATH/pkg/obj" \
- && apk del .build-go-deps \
  && mkdir -p "$GOPATH/src" "$GOPATH/bin" \
  && chmod -R 777 "$GOPATH" \
- && go version
-
-# The following builds Find3
-RUN apk add --no-cache \
-        git \
-        python3 \
-        g++ \
-        mosquitto-clients \
+ && go version \
  && python3 -m ensurepip \
  && rm -r /usr/lib/python*/ensurepip \
- && pip3 install --upgrade pip setuptools
-
-RUN go get -u -v github.com/schollz/find3/server/...
-
-RUN apk add --no-cache \
-        freetype-dev \
-        libpng-dev \
-        lapack-dev \
-        python3-dev \
-        gfortran \
+ && pip3 install --upgrade pip setuptools \
+ && go get -u -v github.com/schollz/find3/server/... \
  && cd $GOPATH/src/github.com/schollz/find3/server/ai \
- && python3 -m pip install numpy==1.15.1 scipy==1.1.0
+ && python3 -m pip install numpy==1.15.1 scipy==1.1.0 \
+ && cd $GOPATH/src/github.com/schollz/find3/server/ai \
+ && python3 -m pip install -r requirements.txt \
+ && cd $GOPATH/src/github.com/schollz/find3/server/main \
+ && go build -v \
+ && apk del .build-deps
 
-RUN cd $GOPATH/src/github.com/schollz/find3/server/ai \
- && python3 -m pip install -r requirements.txt
-
-RUN apk add --no-cache \
-        make
-
-RUN cd $GOPATH/src/github.com/schollz/find3/server/main \
- && go build -v
-
-RUN apk add --no-cache \
-        supervisor
-
-#RUN apk add --no-cache --virtual .build-find3-deps \
-#        git \
-#        make \
-#        libc-dev \
-#        pkgconfig \
-#        g++ \
-#        gcc \
-#        freetype-dev \
-#        libpng \
-#        python3-dev \
-# && apk add --no-cache \
-#        mosquitto-clients \
-#        python3 \
-# && python3 -m ensurepip \
-# && rm -r /usr/lib/python*/ensurepip \
-# && pip3 install --upgrade pip setuptools \
-# && mkdir /build \
-# && cd /build  \
-# && git clone https://github.com/schollz/find3 \
-# && cd /build/find3/server/main \
-# &&	go build -v \
-# && mkdir /app \
-# &&	mv /build/find3/server/main /app/main
-#
-#RUN cd /build/find3/server/ai \
-# && python3 -m pip install -r requirements.txt \
-# && mv /build/find3/server/ai /app/ai \
-# && apk del .build-find3-deps
-
-# The following installs the tools to run Find3
-#RUN apk add --no-cache \
-#        supervisor
-
-#RUN mkdir /usr/local/work && \
-#	mkdir /data && \
-
-#RUN	rm -rf /usr/local/work/src && \
-#	rm -rf ~/.local/share/Trash/* && \
+#RUN rm -rf ~/.local/share/Trash/* && \
 #	rm -rf /usr/local/go* && \
 #	rm -rf /usr/share/perl* && \
-#	rm -rf /build* && \
 #	rm -rf /usr/share/doc*
 
 COPY run.sh /
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 RUN	chmod a+x /run.sh
-# && dos2unix -c 7bit /run.sh \
-# && dos2unix /etc/supervisor/conf.d/supervisord.conf
 
-ENTRYPOINT ["/bin/bash", "-c", "echo hello"]
-CMD [""]
+ENTRYPOINT ["/run.sh"]
