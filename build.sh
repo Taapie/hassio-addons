@@ -15,8 +15,13 @@ for addon in "$@"; do
 
       echo "Using archs: ${archs}"
 
+      env
+
+      cd $(pwd)/${addon}
+      go build -o find3
+
       echo "============================================================================="
-      docker run --rm --privileged -v ~/.docker:/root/.docker -v $(pwd)/${addon}:/data homeassistant/amd64-builder ${archs} -t /data --no-cache
+      #docker run --rm --privileged -v ~/.docker:/root/.docker -v $(pwd)/${addon}:/data homeassistant/amd64-builder ${archs} -t /data --no-cache
 
       echo "Reverting changes..."
       mv ${addon}/config.json.bak ${addon}/config.json

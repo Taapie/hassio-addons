@@ -1,10 +1,13 @@
 sudo: required
+language: go
+go:
+  - "1.10.7"
 services:
   - docker
 before_install:
   - sudo apt-get install jq sed
 env:
-  - ADDON="find3" ARCHS="--amd64"
+  - ADDON="find3" ARCHS="--amd64" GOOS="linux" GOARCH="amd64"
 script:
   - docker login -u $DOCKER_USER -p $DOCKER_PASS
   - chmod a+x build.sh
