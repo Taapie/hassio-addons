@@ -23,13 +23,14 @@ RUN apk add --no-cache \
         python3 \
         mosquitto-clients \
         make \
- && apk add --no-cache --virtual .build-deps \
+	    go
+
+RUN apk add --no-cache --virtual .build-deps \
         gcc \
         musl-dev \
         openssl \
-	    go \
-	    curl \
-	    tar \
+#	    curl \
+#	    tar \
         git \
         g++ \
         freetype-dev \
@@ -37,25 +38,25 @@ RUN apk add --no-cache \
         lapack-dev \
         python3-dev \
         gfortran \
- && export \
-		GOROOT_BOOTSTRAP="$(go env GOROOT)" \
-		GOOS="$(go env GOOS)" \
-		GOARCH="$(go env GOARCH)" \
-		GOHOSTOS="$(go env GOHOSTOS)" \
-		GOHOSTARCH="$(go env GOHOSTARCH)" \
- && apkArch="$(apk --print-arch)" \
- &&	case "$apkArch" in \
-		armhf) export GOARM='6' ;; \
-		x86)   export GO386='387' ;; \
-	esac \
- && go_url="https://golang.org/dl/go${GOLANG_VERSION}.src.tar.gz" \
- &&	curl --silent --show-error --fail --location \
-         --header "Accept: application/tar+gzip, application/x-gzip, application/octet-stream" \
-         -o - "$go_url" \
-    | tar --no-same-owner -C "$GOLANG_BASE_PATH" -xz "$GOLANG_DIR_NAME" \
- && cd "$GOLANG_PATH/src" \
- && ./make.bash \
- && rm -rf "$GOLANG_PATH/pkg/bootstrap" "$GOLANG_PATH/pkg/obj" \
+# && export \
+#		GOROOT_BOOTSTRAP="$(go env GOROOT)" \
+#		GOOS="$(go env GOOS)" \
+#		GOARCH="$(go env GOARCH)" \
+#		GOHOSTOS="$(go env GOHOSTOS)" \
+#		GOHOSTARCH="$(go env GOHOSTARCH)" \
+# && apkArch="$(apk --print-arch)" \
+# &&	case "$apkArch" in \
+#		armhf) export GOARM='6' ;; \
+#		x86)   export GO386='387' ;; \
+#	esac \
+# && go_url="https://golang.org/dl/go${GOLANG_VERSION}.src.tar.gz" \
+# &&	curl --silent --show-error --fail --location \
+#         --header "Accept: application/tar+gzip, application/x-gzip, application/octet-stream" \
+#         -o - "$go_url" \
+#    | tar --no-same-owner -C "$GOLANG_BASE_PATH" -xz "$GOLANG_DIR_NAME" \
+# && cd "$GOLANG_PATH/src" \
+# && ./make.bash \
+# && rm -rf "$GOLANG_PATH/pkg/bootstrap" "$GOLANG_PATH/pkg/obj" \
  && mkdir -p "$GOPATH/src" "$GOPATH/bin" \
  && chmod -R 777 "$GOPATH" \
  && go version \
