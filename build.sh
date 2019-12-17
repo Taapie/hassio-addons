@@ -10,7 +10,7 @@ for addon in "$@"; do
       fi
 
       echo "============================================================================="
-      docker run --rm --privileged -v ~/.docker:/root/.docker -v $(pwd)/${addon}:/data homeassistant/amd64-builder ${archs} -t /data --no-cache
+      docker run --rm --privileged -v ~/.docker:/root/.docker -v $(pwd)/${addon}:/data homeassistant/amd64-builder ${archs} -t /data 
    else
       echo "skipped - no important changes found for this addon"
    fi
