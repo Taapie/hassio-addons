@@ -4,7 +4,7 @@ services:
 before_install:
   - sudo apt-get install jq
 env:
-  - ADDON="hello_world" ARCHS="--armv7 --armhf --amd64 --aarch64 --i386" BUILD="true"
+  - ADDON="lego"
 script:
   - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
   - ./build.sh $ADDON

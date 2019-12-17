@@ -1,6 +1,5 @@
 {
   "build_from": {
-    "amd64": "hectormolinero/lego:v29-amd64",
     "armv7": "hectormolinero/lego:v29-arm32v7"
   }
 }
