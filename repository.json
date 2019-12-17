@@ -4,34 +4,3 @@
   "maintainer": "Dennis Taapken <dennis@lioncode.nl>"
 }
 
-
-"1":{
-"description":"DNS Redirect",
-"destination":{
-"port":"53"
-},
-"inbound-interface":"eth1",
-"inside-address":{
-"address":"192.168.1.8",
-"port":"53"
-},
-"source":{
-"address":"!192.168.1.8"
-},
-"log":"disable",
-"protocol":"tcp_udp",
-"type":"destination"
-},
-
-
-"6000":{
-"description":"Translate DNS to Internal",
-"destination":{
-"address":"192.168.1.8",
-"port":"53"
-},
-"log":"disable",
-"outbound-interface":"eth1",
-"protocol":"tcp_udp",
-"type":"masquerade"
-}
