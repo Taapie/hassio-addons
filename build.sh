@@ -5,10 +5,10 @@ set -e
 if [ "$TRAVIS" == "true" ]; then
    echo "Fixing docker storage on Travic CI..."
    mkdir /tmp/docker
-   echo '{
+   sudo echo '{
       "experimental": true,
       "storage-driver": "overlay2"
-   }' | sudo tee /etc/docker/daemon.json
+   }' > /etc/docker/daemon.json
    sudo service docker restart
    extra_docker_args="--volume=/etc/docker/daemon.json:/etc/docker/daemon.json:ro --mount type=bind,src=/tmp/docker,dst=/var/lib/docker"
 fi
