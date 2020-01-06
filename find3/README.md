@@ -1,6 +1,28 @@
-# Find3 addon for hass.io
-[![Build Status](https://travis-ci.org/Taapie/hassio-addons.svg?branch=master)](https://travis-ci.org/Taapie/hassio-addons)[![](https://images.microbadger.com/badges/version/taapie/armhf-find3.svg)](https://microbadger.com/images/taapie/armhf-find3 "Get your own version badge on microbadger.com")
+# Find3
 
-## Description
 
-This addon provides a [Find3](https://www.internalpositioning.com) server
+## About
+
+
+## Configuration
+
+**Note**: _Remember to restart the add-on when the configuration is changed._
+
+Find3 add-on configuration:
+
+```json
+{
+  "email": "name@domain.com"
+  "domains": [
+    "hassio.domain.com",
+    "cloud9.domain.com"
+  ],
+  "dns": "transip",
+  "env": [
+    "TRANSIP_BLA=value"
+  ],
+}
+```
+
+**Note**: _This is just an example, don't copy and paste it! Create your own!_
+

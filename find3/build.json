@@ -1,0 +1,5 @@
+{
+  "build_from": {
+    "armv7": "jarleh/find3:latest"
+  }
+}
