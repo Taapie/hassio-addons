@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+BUILD="true"
+
 # If on Travis CI, update Docker's configuration.
 if [ "$TRAVIS" == "true" ]; then
    echo "Fixing docker storage on Travic CI..."
