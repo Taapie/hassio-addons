@@ -27,7 +27,9 @@ for addon in "$@"; do
       echo "============================================================================="
       #docker run --rm --privileged ${extra_docker_args} -v ~/.docker:/root/.docker -v $(pwd)/${addon}:/data homeassistant/amd64-builder ${archs} -t /data 
       cd ${addon}
-      docker build --build-arg BUILD_ARCH=armv7 --build-arg BUILD_FROM=homeassistant/armv7-base:latest --build-arg BUILD_VERSION=24b255b $* .
+      pwd
+      echo "docker build --build-arg BUILD_ARCH=armv7 --build-arg BUILD_FROM=homeassistant/armv7-base:latest --build-arg BUILD_VERSION=24b255b ."
+      docker build --build-arg BUILD_ARCH=armv7 --build-arg BUILD_FROM=homeassistant/armv7-base:latest --build-arg BUILD_VERSION=24b255b .
    else
       echo "skipped - no important changes found for this addon"
    fi
