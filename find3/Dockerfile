@@ -1,15 +1,37 @@
 ARG BUILD_FROM
 FROM $BUILD_FROM
 
-USER root:root
+ENV LANG C.UTF-8
 
-RUN export DEBIAN_FRONTEND=noninteractive \
-	&& apt-get update \
-	&& apt-get install -y --no-install-recommends \
-		jq \
-	&& rm -rf /var/lib/apt/lists/*
+# Install requirements for add-on
+RUN apk add --no-cache python3 go g++ mosquitto-clients git
+
+# Get source code of Find3 including Go dependencies
+ARG BUILD_VERSION
+RUN git clone https://github.com/schollz/find3.git && \
+    cd find3 && \
+    git checkout $BUILD_VERSION 2> /dev/null
+
+RUN cd find3 && \
+    go get -u -v .
+
+RUN apk add --no-cache pkgconfig freetype-dev libpng-dev
+
+RUN apk add --no-cache cython
+RUN apk add --no-cache python3-dev
+
+RUN cd find3/server/ai && \
+    python3 -m pip install -r requirements.txt
+
+RUN cd find3/server/ai && \
+    make
+
+RUN cd find3/server/main && \
+    go build -v 
+
+WORKDIR /data
 
 COPY run.sh /
+RUN chmod a+x /run.sh
 
-WORKDIR /
-ENTRYPOINT [ "/run.sh" ]
+CMD [ "/run.sh" ]
