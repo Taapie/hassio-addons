@@ -20,10 +20,10 @@ RUN git clone https://github.com/schollz/find3.git && \
     git checkout $BUILD_VERSION 2> /dev/null && \
     go get -u -v . && \
     cd server/ai && \
-    pip3 install -r requirements.txt && \
-    make && \
-    cd ../main && \
-    go build -v 
+    pip3 install -r requirements.txt
+    #make && \
+    #cd ../main && \
+    #go build -v 
 
 RUN apd del .builddeps && \
     rm -rf /root/.cache
