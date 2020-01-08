@@ -4,7 +4,7 @@ FROM $BUILD_FROM
 ENV LANG C.UTF-8
 
 # Install requirements for add-on
-RUN apk add --no-cache python3 go g++ mosquitto-clients git
+RUN apk add --no-cache python3 g++ mosquitto-clients git
 
 # Get source code of Find3 including Go dependencies
 ARG BUILD_VERSION
