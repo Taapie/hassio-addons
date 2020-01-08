@@ -25,7 +25,7 @@ RUN git clone https://github.com/schollz/find3.git && \
     #cd ../main && \
     #go build -v 
 
-RUN apd del .builddeps && \
+RUN apk del .builddeps && \
     rm -rf /root/.cache
 
 WORKDIR /data
