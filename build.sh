@@ -10,7 +10,21 @@ if [ "$TRAVIS" == "true" ]; then
       "storage-driver": "overlay2"
    }' | sudo tee /etc/docker/daemon.json > /dev/null
    sudo service docker restart
-   extra_docker_args="--volume=/etc/docker/daemon.json:/etc/docker/daemon.json:ro --mount type=bind,src=/tmp/docker,dst=/var/lib/docker"
+   DATA_PATH="/data"
+   PWD=$(pwd)
+   extra_docker_args="--volume=/etc/docker/daemon.json:/etc/docker/daemon.json:ro --mount type=bind,src=/tmp/docker,dst=/var/lib/docker --volume=$PWD:$DATA_PATH:rw"
+   extra_builder_args=""
+else
+   DATA_PATH="/share/addon-build"
+   mkdir -p  ${DATA_PATH} > /dev/null 2>&1
+   extra_docker_args="--volume=/mnt/data/supervisor/${DATA_PATH}:${DATA_PATH}:rw --volume=/var/run/docker.sock:/var/run/docker.sock:ro"
+   extra_builder_args="--no-cache"
+fi
+
+# Determine locak machine architecture
+LOCAL_ARCH=`uname -m`
+if [[ $LOCAL_ARCH == "armv7l" ]]; then
+  LOCAL_ARCH='armv7'
 fi
 
 archs="${ARCHS}"
@@ -23,7 +37,11 @@ for addon in "$@"; do
       fi
 
       echo "============================================================================="
-      docker run --rm --privileged ${extra_docker_args} -v ~/.docker:/root/.docker -v $(pwd)/${addon}:/data homeassistant/amd64-builder ${archs} -t /data 
+      if [ "$TRAVIS" != "true" ]; then
+         rm -rf  ${DATA_PATH}/${addon} > /dev/null 2>&1
+         cp -pR ${addon} ${DATA_PATH}
+      fi
+      docker run --rm --privileged ${extra_docker_args} --volume ~/.docker:/root/.docker homeassistant/${LOCAL_ARCH}-builder ${extra_builder_args} -t ${DATA_PATH}/${addon} ${archs}
    else
       echo "skipped - no important changes found for this addon"
    fi
