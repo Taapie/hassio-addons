@@ -4,7 +4,7 @@ services:
 before_install:
   - sudo apt-get install jq
 env:
-  - ADDON="lego find3"
+  - ADDON="lego"
 script:
   - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
   - ./build.sh $ADDON
