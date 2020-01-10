@@ -66,7 +66,7 @@ for ADDON in "$@"; do
 	    docker manifest create $IMAGE:$VERSION $DOCKER_IMAGES
             for DOCKER_IMAGE in $DOCKER_IMAGES; do
                PLATFORM=${DOCKER_IMAGE##*-}
-               docker manifest annotate $IMAGE:$VERSION $DOCKER_IMAGE --arch linux/$PLATFORM
+               docker manifest annotate $IMAGE:$VERSION $DOCKER_IMAGE --arch $PLATFORM
             done
             docker manifest push $IMAGE:$VERSION
          fi
