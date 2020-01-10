@@ -52,7 +52,6 @@ for ADDON in "$@"; do
                   buildctl build --frontend dockerfile.v0 \
                                  --local dockerfile=${ADDON} \
                                  --local context=${ADDON} \
-                                 --output type=image,name=docker.io/${DOCKER_IMAGE}:${DOCKER_TAG},push=true \
                                  --output type=image,name=docker.io/${DOCKER_IMAGE}:${DOCKER_LATEST_TAG},push=true \
 			         --export-cache type=inline \
 			         --import-cache type=registry,ref=docker.io/${DOCKER_IMAGE}:${DOCKER_LATEST_TAG} \
@@ -61,6 +60,9 @@ for ADDON in "$@"; do
 	                         --opt build-arg:BUILD_ARCH=${BUILD_ARCH} \
 	                         --opt build-arg:BUILD_VERSION=${BUILD_VERSION} \
 	                         --opt build-arg:BUILD_FROM=${BUILD_FROM} 
+
+                  docker tag docker.io/${DOCKER_IMAGE}:${DOCKER_LATEST_TAG} docker.io/${DOCKER_IMAGE}:${DOCKER_TAG}
+                  docker push docker.io/${DOCKER_IMAGE}:${DOCKER_TAG}
                fi
             fi
          done
