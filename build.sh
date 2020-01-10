@@ -56,7 +56,8 @@ for addon in "$@"; do
       fi
 
       echo "============================================================================="
-      docker run --rm --privileged ${extra_docker_args} --volume ~/.docker:/root/.docker homeassistant/${LOCAL_ARCH}-builder ${extra_builder_args} -t ${DATA_PATH}/${addon} ${archs}
+      #docker run --rm --privileged ${extra_docker_args} --volume ~/.docker:/root/.docker homeassistant/${LOCAL_ARCH}-builder ${extra_builder_args} -t ${DATA_PATH}/${addon} ${archs}
+      docker buildx ls
    else
       echo "skipped - no important changes found for this addon"
    fi
