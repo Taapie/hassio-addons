@@ -13,8 +13,7 @@ before_install:
   - sudo docker cp buildkit:/usr/bin/buildctl /usr/bin/
   - export BUILDKIT_HOST=tcp://0.0.0.0:1234
 env:
-  - BUILD="True"
-  - ADDONS="lego find3"
+  - ADDONS="lego find3" BUILD="TRUE"
 script:
   - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
   - ./build.sh $ADDONS
