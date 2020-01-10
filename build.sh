@@ -17,7 +17,7 @@ for ADDON in "$@"; do
 	    echo "Build for architecture '$ARCH'"
 
             case "${ARCH}" in 
-               amd64) PLATFORM=adm64 ;;
+               amd64) PLATFORM=amd64 ;;
                armhf) PLATFORM=arm ;;
                armv7) PLATFORM=arm ;;
                aarch64) PLATFORM=arm64 ;;
