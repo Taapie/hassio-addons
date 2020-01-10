@@ -6,7 +6,7 @@ export DOCKER_CLI_EXPERIMENTAL=enabled
 for ADDON in "$@"; do
    echo "*****************************************************************************"
    echo "Building addon ${ADDON}... "
-   if [[ ${BUILD} == "true" ]] || [[ -z ${TRAVIS_COMMIT_RANGE} ]] || git diff --name-only ${TRAVIS_COMMIT_RANGE} | grep -v README.md | grep -q ${ADDON}; then
+   if [[ ${BUILD,,} == "true" ]] || [[ -z ${TRAVIS_COMMIT_RANGE} ]] || git diff --name-only ${TRAVIS_COMMIT_RANGE} | grep -v README.md | grep -q ${ADDON}; then
        ARCHS=$(jq -r '.arch // ["armv7", "armhf", "amd64", "aarch64", "i386"] | [.[] | .] | join(" ")' ${ADDON}/config.json)
        VERSION=$(jq -r '.version' ${ADDON}/config.json)
        IMAGE=$(jq -r '.image' ${ADDON}/config.json)
