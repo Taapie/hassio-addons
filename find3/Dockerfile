@@ -9,7 +9,7 @@ RUN apk add --no-cache mosquitto-clients freetype libpng openblas python3 py3-pi
     wget -q https://github.com/xianyi/OpenBLAS/archive/v0.3.6.tar.gz && \
     tar -xf v0.3.6.tar.gz && \
     cd OpenBLAS-0.3.6/ && \
-    make BINARY=64 FC=$(which gfortran) USE_THREAD=1 && \
+    make TARGET=${BUILD_ARCH} BINARY=64 FC=$(which gfortran) USE_THREAD=1 && \
     make PREFIX=/usr install && \
     pip3 install scipy==1.1.0
 
