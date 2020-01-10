@@ -21,29 +21,30 @@ for ADDON in "$@"; do
             armv7) PLATFORM=arm ;;
             aarch64) PLATFORM=arm64 ;;
             i386) PLATFORM=386 ;;
+	    *) echo "Unknown architecture '${ARCH}'"; exit 1 ;;
          esac
 	 
          DOCKERFILE_LOCATION="${ADDON}/Dockerfile"
-	 DOCKER_IMAGE=${IMAGE}
+	 DOCKER_IMAGE=${IMAGE/\{arch\}/$ARCH}
 	 DOCKER_TAG=${VERSION}
 
 	 BUILD_ARCH=${ARCH}
 	 BUILD_VERSION=${VERSION}
-         BUILD_FROM=$(jq -r ".build_from.${ARCH}" ${ADDON}/config.json)
+         BUILD_FROM=$(jq -r ".build_from .${ARCH}" ${ADDON}/build.json)
 
-	 env
-
-         buildctl build --frontend dockerfile.v0 \
-                        --frontend-opt platform=linux/${PLATFORM} \
-                        --frontend-opt filename=${DOCKERFILE_LOCATION} \
-                        --exporter image \
-                        --exporter-opt name=docker.io/${DOCKER_IMAGE}:${DOCKER_TAG} \
-                        --exporter-opt push=true \
-                        --local dockerfile=. \
-                        --local context=. \
-	                --opt build-arg:BUILD_ARCH=${BUILD_ARCH} \
-	                --opt build-arg:BUILD_VERSION=${BUILD_VERSION} \
-	                --opt build-arg:BUILD_FROM=${BUILD_FROM} 
+         if [[ ${BUILD_FROM} == "" ]]; then 
+            echo "Missing BUILD config in build.json for '${ARCH}'"
+         else
+            buildctl build --frontend dockerfile.v0 \
+                           --local dockerfile=. \
+                           --local context=. \
+                           --output type=image,name=docker.io/${DOCKER_IMAGE}:${DOCKER_TAG},push=true \
+                           --opt platform=linux/${PLATFORM} \
+                           --opt filename=${DOCKERFILE_LOCATION} \
+	                   --opt build-arg:BUILD_ARCH=${BUILD_ARCH} \
+	                   --opt build-arg:BUILD_VERSION=${BUILD_VERSION} \
+	                   --opt build-arg:BUILD_FROM=${BUILD_FROM} 
+         fi
       done
    else
       echo "skipped - no important changes found for this addon"
