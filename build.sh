@@ -3,6 +3,19 @@ set -e
 
 export DOCKER_CLI_EXPERIMENTAL=enabled
 
+arch_to_platform () {
+   case "$1" in 
+      amd64) PLATFORM=amd64 ;;
+      armhf) PLATFORM=arm ;;
+      armv7) PLATFORM=arm ;;
+      aarch64) PLATFORM=arm64 ;;
+      i386) PLATFORM=386 ;;
+      *) echo "Unknown architecture '${ARCH}'"; exit 1 ;;
+   esac
+
+   echo $PLATFORM
+}
+
 for ADDON in "$@"; do
    echo "*****************************************************************************"
    echo "Building addon ${ADDON}... "
@@ -12,42 +25,51 @@ for ADDON in "$@"; do
          VERSION=$(jq -r '.version' ${ADDON}/config.json)
          IMAGE=$(jq -r '.image' ${ADDON}/config.json)
 
+	 DOCKER_IMAGES=""
          for ARCH in $ARCHS; do
             echo "============================================================================="
 	    echo "Build for architecture '$ARCH'"
 
-            case "${ARCH}" in 
-               amd64) PLATFORM=amd64 ;;
-               armhf) PLATFORM=arm ;;
-               armv7) PLATFORM=arm ;;
-               aarch64) PLATFORM=arm64 ;;
-               i386) PLATFORM=386 ;;
-	       *) echo "Unknown architecture '${ARCH}'"; exit 1 ;;
-            esac
+            PLATFORM=`arch_to_platform ${ARCH}`
 	 
-	    DOCKER_IMAGE=${IMAGE/\{arch\}/$ARCH}
-	    DOCKER_TAG=${VERSION}
+	    DOCKER_IMAGE=${IMAGE}
+	    DOCKER_TAG="${VERSION}-${PLATFORM}"
 
-	    BUILD_ARCH=${ARCH}
-	    BUILD_VERSION=${VERSION}
-            BUILD_FROM=$(jq -r ".build_from .${ARCH}" ${ADDON}/build.json)
-
-            if [[ ${BUILD_FROM} == "" ]]; then 
-               echo "skippe - missing BUILD config in build.json for '${ARCH}'"
+	    if [[ $DOCKER_IMAGES == *" $DOCKER_IMAGE:$DOCKER_TAG "* ]]; then
+               echo "skipped - platform '${PLATFORM}' has already been build" 
             else
-               buildctl build --frontend dockerfile.v0 \
-                              --local dockerfile=${ADDON} \
-                              --local context=${ADDON} \
-                              --output type=image,name=docker.io/${DOCKER_IMAGE}:${DOCKER_TAG},push=true \
-			      --export-cache type=inline \
-			      --import-cache type=registry,ref=docker.io/${DOCKER_IMAGE} \
-                              --opt platform=linux/${PLATFORM} \
-                              --opt filename=Dockerfile \
-	                      --opt build-arg:BUILD_ARCH=${BUILD_ARCH} \
-	                      --opt build-arg:BUILD_VERSION=${BUILD_VERSION} \
-	                      --opt build-arg:BUILD_FROM=${BUILD_FROM} 
+               DOCKER_IMAGES="$DOCKER_IMAGES $DOCKER_IMAGE:$DOCKER_TAG "
+
+	       BUILD_ARCH=${ARCH}
+	       BUILD_VERSION=${VERSION}
+               BUILD_FROM=$(jq -r ".build_from .${ARCH}" ${ADDON}/build.json)
+
+               if [[ ${BUILD_FROM} == "" ]]; then 
+                  echo "skipped - missing BUILD config in build.json for '${ARCH}'"
+               else
+                  buildctl build --frontend dockerfile.v0 \
+                                 --local dockerfile=${ADDON} \
+                                 --local context=${ADDON} \
+                                 --output type=image,name=docker.io/${DOCKER_IMAGE}:${DOCKER_TAG},push=true \
+			         --export-cache type=inline \
+			         --import-cache type=registry,ref=docker.io/${DOCKER_IMAGE} \
+                                 --opt platform=linux/${PLATFORM} \
+                                 --opt filename=Dockerfile \
+	                         --opt build-arg:BUILD_ARCH=${BUILD_ARCH} \
+	                         --opt build-arg:BUILD_VERSION=${BUILD_VERSION} \
+	                         --opt build-arg:BUILD_FROM=${BUILD_FROM} 
+               fi
             fi
          done
+
+         if [[ $DOCKER_IMAGES != "" ]]; then
+	    docker manifest create $IMAGE:$VERSION $DOCKER_IMAGES
+            for DOCKER_IMAGE in $DOCKER_IMAGES; do
+               PLATFORM=${DOCKER_IMAGE##*-}
+               docker manifest annotate $IMAGE:$VERSION $DOCKER_IMAGE --arch linux/$PLATFORM
+            done
+            docker manifest push $IMAGE:$VERSION
+         fi
       else
          echo "skipped - missing config.json or build.json" 
       fi
