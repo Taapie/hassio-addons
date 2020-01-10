@@ -4,7 +4,7 @@
   "slug": "hello_world",
   "description": "My first real add-on!",
   "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
-  "image": "taapie/hassio-{arch}-hello_world",
+  "image": "taapie/hassio-hello_world",
   "startup": "before",
   "boot": "auto",
   "options": {},
