@@ -61,7 +61,7 @@ for ADDON in "$@"; do
 	                         --opt build-arg:BUILD_VERSION=${BUILD_VERSION} \
 	                         --opt build-arg:BUILD_FROM=${BUILD_FROM} 
 
-                  docker pull docker.io/${DOCKER_IMAGE}:${DOCKER_TAG}
+		  docker pull docker.io/${DOCKER_IMAGE}:${DOCKER_LATEST_TAG}
                   docker tag docker.io/${DOCKER_IMAGE}:${DOCKER_LATEST_TAG} docker.io/${DOCKER_IMAGE}:${DOCKER_TAG}
                   docker push docker.io/${DOCKER_IMAGE}:${DOCKER_TAG}
                fi
