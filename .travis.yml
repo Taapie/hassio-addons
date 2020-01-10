@@ -1,10 +1,20 @@
+dist: xenial
 sudo: required
+addons:
+  apt:
+    packages:
+      - jq
+      - docker-ce
 services:
   - docker
 before_install:
-  - sudo apt-get install jq
+  - sudo docker run --privileged linuxkit/binfmt:v0.6
+  - sudo docker run -d --privileged -p 1234:1234 --name buildkit moby/buildkit:latest --addr tcp://0.0.0.0:1234 --oci-worker-platform linux/amd64 --oci-worker-platform linux/armhf
+  - sudo docker cp buildkit:/usr/bin/buildctl /usr/bin/
+  - export BUILDKIT_HOST=tcp://0.0.0.0:1234
 env:
-  - ADDON="lego find3"
+  - BUILD="True"
+  - ADDONS="lego find3"
 script:
   - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-  - ./build.sh $ADDON
+  - ./build.sh $ADDONS
