@@ -40,7 +40,7 @@ for ADDON in "$@"; do
                               --local context=${ADDON} \
                               --output type=image,name=docker.io/${DOCKER_IMAGE}:${DOCKER_TAG},push=true \
 			      --export-cache type=inline \
-			      --import-cache type=registry,ref=docker.io/${DOCKER_IMAGE}
+			      --import-cache type=registry,ref=docker.io/${DOCKER_IMAGE} \
                               --opt platform=linux/${PLATFORM} \
                               --opt filename=Dockerfile \
 	                      --opt build-arg:BUILD_ARCH=${BUILD_ARCH} \
