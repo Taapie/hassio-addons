@@ -24,7 +24,6 @@ for ADDON in "$@"; do
 	    *) echo "Unknown architecture '${ARCH}'"; exit 1 ;;
          esac
 	 
-         DOCKERFILE_LOCATION="${ADDON}/Dockerfile"
 	 DOCKER_IMAGE=${IMAGE/\{arch\}/$ARCH}
 	 DOCKER_TAG=${VERSION}
 
@@ -36,11 +35,11 @@ for ADDON in "$@"; do
             echo "Missing BUILD config in build.json for '${ARCH}'"
          else
             buildctl build --frontend dockerfile.v0 \
-                           --local dockerfile=. \
-                           --local context=. \
+                           --local dockerfile=${ADDON} \
+                           --local context=${ADDON} \
                            --output type=image,name=docker.io/${DOCKER_IMAGE}:${DOCKER_TAG},push=true \
                            --opt platform=linux/${PLATFORM} \
-                           --opt filename=${DOCKERFILE_LOCATION} \
+                           --opt filename=Dockerfile \
 	                   --opt build-arg:BUILD_ARCH=${BUILD_ARCH} \
 	                   --opt build-arg:BUILD_VERSION=${BUILD_VERSION} \
 	                   --opt build-arg:BUILD_FROM=${BUILD_FROM} 
