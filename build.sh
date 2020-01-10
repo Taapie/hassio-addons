@@ -40,6 +40,8 @@ for ADDON in "$@"; do
             else
                DOCKER_IMAGES="$DOCKER_IMAGES $DOCKER_IMAGE:$DOCKER_TAG "
 
+	       DOCKER_LATEST_TAG="latest-${PLATFORM}"
+
 	       BUILD_ARCH=${ARCH}
 	       BUILD_VERSION=${VERSION}
                BUILD_FROM=$(jq -r ".build_from .${ARCH}" ${ADDON}/build.json)
@@ -51,8 +53,9 @@ for ADDON in "$@"; do
                                  --local dockerfile=${ADDON} \
                                  --local context=${ADDON} \
                                  --output type=image,name=docker.io/${DOCKER_IMAGE}:${DOCKER_TAG},push=true \
+                                 --output type=image,name=docker.io/${DOCKER_IMAGE}:${DOCKER_LATEST_TAG},push=true \
 			         --export-cache type=inline \
-			         --import-cache type=registry,ref=docker.io/${DOCKER_IMAGE} \
+			         --import-cache type=registry,ref=docker.io/${DOCKER_IMAGE}:${DOCKER_LATEST_TAG} \
                                  --opt platform=linux/${PLATFORM} \
                                  --opt filename=Dockerfile \
 	                         --opt build-arg:BUILD_ARCH=${BUILD_ARCH} \
