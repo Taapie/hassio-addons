@@ -40,7 +40,10 @@ for ADDON in "$@"; do
                         --exporter-opt name=docker.io/${DOCKER_IMAGE}:${DOCKER_TAG} \
                         --exporter-opt push=true \
                         --local dockerfile=. \
-                        --local context=.	 
+                        --local context=. \
+	                --opt build-arg:BUILD_ARCH=${BUILD_ARCH} \
+	                --opt build-arg:BUILD_VERSION=${BUILD_VERSION} \
+	                --opt build-arg:BUILD_FROM=${BUILD_FROM} 
       done
    else
       echo "skipped - no important changes found for this addon"
