@@ -13,7 +13,7 @@ before_install:
   - sudo docker cp buildkit:/usr/bin/buildctl /usr/bin/
   - export BUILDKIT_HOST=tcp://0.0.0.0:1234
 env:
-  - ADDONS="hello-world lego"
+  - BUILD="true" ADDONS="hello-world"
 script:
   - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
   - ./build.sh $ADDONS
