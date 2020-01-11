@@ -6,9 +6,11 @@ ENV LANG C.UTF-8
 WORKDIR /data
 
 # Install requirements for add-on
-RUN git clone https://github.com/ct-Open-Source/tuya-convert && \
-    cd tuya-convert && \
-    ./install_preqreq.sh
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends git sudo && \
+    git clone https://github.com/ct-Open-Source/tuya-convert 
+RUN cd tuya-convert && \
+    ./install_prereq.sh
 
 # Copy data for add-on
 COPY run.sh /
