@@ -77,7 +77,12 @@ for ADDON in "$@"; do
 	    docker manifest create $IMAGE:$VERSION $DOCKER_IMAGES
             for DOCKER_IMAGE in $DOCKER_IMAGES; do
                PLATFORM=${DOCKER_IMAGE##*-}
-               docker manifest annotate $IMAGE:$VERSION $DOCKER_IMAGE --arch $PLATFORM
+               if [[ $PLATFORM == "arm" ]]; then
+                  docker manifest annotate $IMAGE:$VERSION $DOCKER_IMAGE --arch arv/v6
+                  docker manifest annotate $IMAGE:$VERSION $DOCKER_IMAGE --arch arm/v7
+               else
+                  docker manifest annotate $IMAGE:$VERSION $DOCKER_IMAGE --arch $PLATFORM
+               fi		      
             done
             docker manifest push $IMAGE:$VERSION
          fi
