@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -e
 
+if ! [ -x "$(command -v buildctl)" ]; then
+   echo 'Missing buildctl - can not build on this system' >&2
+   exit 1
+fi
+
 export DOCKER_CLI_EXPERIMENTAL=enabled
 
 arch_to_platform () {
