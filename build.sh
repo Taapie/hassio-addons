@@ -78,7 +78,7 @@ for ADDON in "$@"; do
             for DOCKER_IMAGE in $DOCKER_IMAGES; do
                PLATFORM=${DOCKER_IMAGE##*-}
                if [[ $PLATFORM == "arm" ]]; then
-                  docker manifest annotate $IMAGE:$VERSION $DOCKER_IMAGE --arch arv/v6
+                  docker manifest annotate $IMAGE:$VERSION $DOCKER_IMAGE --arch arm/v6
                   docker manifest annotate $IMAGE:$VERSION $DOCKER_IMAGE --arch arm/v7
                else
                   docker manifest annotate $IMAGE:$VERSION $DOCKER_IMAGE --arch $PLATFORM
