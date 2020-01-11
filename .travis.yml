@@ -13,7 +13,9 @@ before_install:
   - sudo docker cp buildkit:/usr/bin/buildctl /usr/bin/
   - export BUILDKIT_HOST=tcp://0.0.0.0:1234
 env:
-  - ADDONS="lego"
+  - ADDON="lego"
+  - ADDON="hello-world" CONFIG="config-test.json"
+  - ADDON="tuya-convert" BUILD="true"
 script:
   - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-  - ./build.sh $ADDONS
+  - ./build-travis.sh $ADDONS

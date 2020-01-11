@@ -1,0 +1,15 @@
+{
+  "name": "Tuya Convert",
+  "version": "0.1",
+  "slug": "tuya-convert",
+  "description": "Tool to flash a new firmware to a Tuya based device",
+  "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
+  "image": "taapie/hassio-tuya-convert",
+  "startup": "once",
+  "boot": "manual",
+  "options": {},
+  "schema": {},
+  "ports": {
+    "8000/tcp": 8000
+  }
+}
