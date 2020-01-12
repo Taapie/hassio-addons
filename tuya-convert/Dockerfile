@@ -7,7 +7,7 @@ WORKDIR /data
 
 # Install requirements for add-on
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends git sudo iproute2 iputils-ping && \
+    apt-get install -y --no-install-recommends git sudo iproute2 iputils-ping libssl-dev && \
     git clone https://github.com/M4dmartig4n/tuya-convert
 RUN cd tuya-convert && \
     ./install_prereq.sh
