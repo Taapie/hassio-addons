@@ -10,6 +10,7 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends git sudo iproute2 iputils-ping && \
     git clone https://github.com/ct-Open-Source/tuya-convert 
 RUN cd tuya-convert && \
+    git checkout development && \
     ./install_prereq.sh
 
 # Copy data for add-on
