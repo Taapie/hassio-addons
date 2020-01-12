@@ -7,7 +7,7 @@ WORKDIR /data
 
 # Install requirements for add-on
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends git sudo && \
+    apt-get install -y --no-install-recommends git sudo iproute2 && \
     git clone https://github.com/ct-Open-Source/tuya-convert 
 RUN cd tuya-convert && \
     ./install_prereq.sh
