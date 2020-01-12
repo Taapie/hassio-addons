@@ -1,6 +1,6 @@
 {
   "name": "Tuya Convert",
-  "version": "0.2",
+  "version": "0.3",
   "slug": "tuya-convert",
   "description": "Tool to flash a new firmware to a Tuya based device",
   "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
