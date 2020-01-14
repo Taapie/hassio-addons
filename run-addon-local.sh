@@ -10,7 +10,6 @@ ADDON=$1
 CMD=$2
 echo "*****************************************************************************"
 echo "Runing addon ${ADDON}... "
-echo "*****************************************************************************"
 if [[ -f "${ADDON}/${CONFIG}" ]]; then 
    VERSION=$(jq -r '.version' ${ADDON}/${CONFIG})
    IMAGE=$(jq -r '.image' ${ADDON}/${CONFIG})
@@ -64,6 +63,16 @@ if [[ -f "${ADDON}/${CONFIG}" ]]; then
       done
    fi
 
+   DEVICES=$(jq -r '.devices' ${ADDON}/${CONFIG})
+   if [[ $DEVICES != "null" ]]; then
+      DEVICES=$(jq -r '.devices | .[]' ${ADDON}/${CONFIG})
+      for DEVICE in $DEVICES; do
+         EXTRA_DOCKER_ARGS="--device=${DEVICE} $EXTRA_DOCKER_ARGS"
+      done
+   fi
+
+   echo Command: docker run -it $EXTRA_DOCKER_ARGS ${IMAGE}:${VERSION} ${CMD}
+   echo "*****************************************************************************"
    docker run -it $EXTRA_DOCKER_ARGS ${IMAGE}:${VERSION} ${CMD}
 else
    echo "skipped - missing ${CONFIG}" 
