@@ -15,7 +15,6 @@ before_install:
 env:
   - ADDON="lego"
   - ADDON="hello-world" CONFIG="config-test.json"
-  - ADDON="tuya-convert" BUILD="true"
 script:
   - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
   - ./travis.sh $ADDON
