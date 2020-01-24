@@ -1,5 +1,6 @@
 dist: xenial
-sudo: required
+os: linux
+language: ruby
 addons:
   apt:
     packages:
