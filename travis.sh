@@ -26,17 +26,19 @@ if [[ $CONFIG == "" ]]; then
    CONFIG="config.json"
 fi
 
+ADDON=$1
+ARCH=$2
 for ADDON in "$@"; do
    echo "*****************************************************************************"
    echo "Building addon ${ADDON}... "
    if [[ ${BUILD,,} == "true" ]] || [[ -z ${TRAVIS_COMMIT_RANGE} ]] || git diff --name-only ${TRAVIS_COMMIT_RANGE} | grep -v README.md | grep -q ${ADDON}; then
       if [[ -f "${ADDON}/${CONFIG}" ]] && [[ -f "${ADDON}/build.json" ]]; then 
-         ARCHS=$(jq -r '.arch // ["armv7", "armhf", "amd64", "aarch64", "i386"] | [.[] | .] | join(" ")' ${ADDON}/${CONFIG})
+         #ARCHS=$(jq -r '.arch // ["armv7", "armhf", "amd64", "aarch64", "i386"] | [.[] | .] | join(" ")' ${ADDON}/${CONFIG})
          VERSION=$(jq -r '.version' ${ADDON}/${CONFIG})
          IMAGE=$(jq -r '.image' ${ADDON}/${CONFIG})
 
 	 DOCKER_IMAGES=""
-         for ARCH in $ARCHS; do
+         #for ARCH in $ARCHS; do
             echo "============================================================================="
 	    echo "Build for architecture '$ARCH'"
 
@@ -76,7 +78,7 @@ for ADDON in "$@"; do
                   docker push docker.io/${DOCKER_IMAGE}:${DOCKER_TAG}
                fi
             fi
-         done
+         #done
 
          if [[ $DOCKER_IMAGES != "" ]]; then
 	    docker manifest create $IMAGE:$VERSION $DOCKER_IMAGES
@@ -92,4 +94,4 @@ for ADDON in "$@"; do
    else
       echo "skipped - no important changes found for this addon"
    fi
-done
+#done
