@@ -2,6 +2,8 @@
 
 This add-on allows you to get certificates from Let's Encrypt using the DNS challenge type.
 
+[![Build Status](https://badges.herokuapp.com/travis/Taapie/hassio-addons?branch=master&label=Lego&env=ADDON=%22lego%22)](https://travis-ci.org/Taapie/hassio-addons)
+
 ## About
 
 There are several add-ons voor Hass.io that get Let's Encrypt certificates using the HTTP challenge type. This challenge type requires you to open up port 80 of your Hass.io installation to the internet. Let's Encrypt also allows users to use their DNS entries to retrieve a certificate and thereby allowing you to keep port 80 closed.
