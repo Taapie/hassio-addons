@@ -26,14 +26,14 @@ if [[ $CONFIG == "" ]]; then
    CONFIG="config.json"
 fi
 
-ADDON=$1
-ARCH=$2
 for ADDON in "$@"; do
    echo "*****************************************************************************"
    echo "Building addon ${ADDON}... "
    if [[ ${BUILD,,} == "true" ]] || [[ -z ${TRAVIS_COMMIT_RANGE} ]] || git diff --name-only ${TRAVIS_COMMIT_RANGE} | grep -v README.md | grep -q ${ADDON}; then
       if [[ -f "${ADDON}/${CONFIG}" ]] && [[ -f "${ADDON}/build.json" ]]; then 
-         ARCHS=$(jq -r '.arch // ["armv7", "armhf", "amd64", "aarch64", "i386"] | [.[] | .] | join(" ")' ${ADDON}/${CONFIG})
+         if [[ $ARCHS == "" ]]; then
+            ARCHS=$(jq -r '.arch // ["armv7", "armhf", "amd64", "aarch64", "i386"] | [.[] | .] | join(" ")' ${ADDON}/${CONFIG})
+	 fi
          VERSION=$(jq -r '.version' ${ADDON}/${CONFIG})
          IMAGE=$(jq -r '.image' ${ADDON}/${CONFIG})
 

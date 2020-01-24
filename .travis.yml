@@ -14,8 +14,14 @@ before_install:
   - sudo docker cp buildkit:/usr/bin/buildctl /usr/bin/
   - export BUILDKIT_HOST=tcp://0.0.0.0:1234
 env:
+  matrix:
+    - ARCH="armv7"
+    - ARCH="armhf"
+    - ARCH="amd64"
+    - ARCH="aarch64"
+    - ARCH="i386"
   - ADDON="lego"
   - ADDON="hello-world" CONFIG="config-test.json"
 script:
   - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-  - ./travis.sh $ADDON
+  - ARCHS=$ARCH ./travis.sh $ADDON
