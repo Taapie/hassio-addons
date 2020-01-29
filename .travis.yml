@@ -15,12 +15,12 @@ before_install:
   - export BUILDKIT_HOST=tcp://0.0.0.0:1234
 env:
 #START_GEN_ENV
-  - ADDON="hello-world" ARCH="armhf"
-  - ADDON="hello-world" ARCH="armv7"
-  - ADDON="hello-world" ARCH="aarch64"
-  - ADDON="hello-world" ARCH="amd64"
-  - ADDON="hello-world" ARCH="i386"
-  - ADDON="lego" ARCH="armv7"
+  - LABEL="hello-world-armhf" ADDON="hello-world" ARCH="armhf" CONFIG="config-test.json"
+  - LABEL="hello-world-armv7" ADDON="hello-world" ARCH="armv7" CONFIG="config-test.json"
+  - LABEL="hello-world-aarch64" ADDON="hello-world" ARCH="aarch64" CONFIG="config-test.json"
+  - LABEL="hello-world-amd64" ADDON="hello-world" ARCH="amd64" CONFIG="config-test.json"
+  - LABEL="hello-world-i386" ADDON="hello-world" ARCH="i386" CONFIG="config-test.json"
+  - LABEL="lego-armv7" ADDON="lego" ARCH="armv7" CONFIG="config.json"
 #END_GEN_ENV
 script:
   - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
