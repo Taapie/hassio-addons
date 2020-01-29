@@ -15,6 +15,11 @@ before_install:
   - export BUILDKIT_HOST=tcp://0.0.0.0:1234
 env:
 #START_GEN_ENV
+  - ADDON="golang" ARCH="armhf" CONFIG="config.json"
+  - ADDON="golang" ARCH="armv7" CONFIG="config.json"
+  - ADDON="golang" ARCH="aarch64" CONFIG="config.json"
+  - ADDON="golang" ARCH="amd64" CONFIG="config.json"
+  - ADDON="golang" ARCH="i386" CONFIG="config.json"
   - ADDON="hello-world" ARCH="armhf" CONFIG="config-test.json"
   - ADDON="hello-world" ARCH="armv7" CONFIG="config-test.json"
   - ADDON="hello-world" ARCH="aarch64" CONFIG="config-test.json"

@@ -1,0 +1,12 @@
+{
+  "name": "Golang",
+  "version": "1.13.6",
+  "slug": "golang",
+  "description": "Golang Image",
+  "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
+  "image": "taapie/hassio-golang",
+  "startup": "before",
+  "boot": "auto",
+  "options": {},
+  "schema": {}
+}
