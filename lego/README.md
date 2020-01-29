@@ -2,7 +2,9 @@
 
 This add-on allows you to get certificates from Let's Encrypt using the DNS challenge type.
 
-[![Build Status](https://badges.herokuapp.com/travis/Taapie/hassio-addons?branch=master&label=Lego&env=ADDON=%22lego%22)](https://travis-ci.org/Taapie/hassio-addons)
+<!-- START_GEN_BADGES -->
+[![Build Status](https://badges.herokuapp.com/travis/Taapie/hassio-addons?branch=feature/travis-badges&label=armv7&env=ADDON=%22lego%22%20ARCH=%22armv7%22)](https://travis-ci.org/Taapie/hassio-addons)
+<!-- END_GEN_BADGES -->
 
 ## About
 
