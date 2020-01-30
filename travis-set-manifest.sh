@@ -40,7 +40,7 @@ for ADDON in "$@"; do
 	    DOCKER_TAG="${VERSION}-${PLATFORM}"
 
 	    if [[ $DOCKER_IMAGES == *" $DOCKER_IMAGE:$DOCKER_TAG "* ]]; then
-               echo "skipped - platform '${PLATFORM}' has already been build" 
+               echo "skipped - platform '${PLATFORM}' has already been set" 
             else
                DOCKER_IMAGES="$DOCKER_IMAGES $DOCKER_IMAGE:$DOCKER_TAG "
             fi
