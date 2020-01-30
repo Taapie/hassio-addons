@@ -13,23 +13,32 @@ before_install:
   - sudo docker run -d --privileged -p 1234:1234 --name buildkit moby/buildkit:latest --addr tcp://0.0.0.0:1234 --oci-worker-platform linux/amd64 --oci-worker-platform linux/armhf --oci-worker-platform linux/arm64 --oci-worker-platform linux/386
   - sudo docker cp buildkit:/usr/bin/buildctl /usr/bin/
   - export BUILDKIT_HOST=tcp://0.0.0.0:1234
-env:
-#START_GEN_ENV
-  - ADDON="golang" ARCH="aarch64" CONFIG="config.json"
-  - ADDON="golang" ARCH="amd64" CONFIG="config.json"
-  - ADDON="golang" ARCH="armhf" CONFIG="config.json"
-  - ADDON="golang" ARCH="armv7" CONFIG="config.json"
-  - ADDON="golang" ARCH="i386" CONFIG="config.json"
-  - ADDON="hello-world" ARCH="aarch64" CONFIG="config-test.json"
-  - ADDON="hello-world" ARCH="amd64" CONFIG="config-test.json"
-  - ADDON="hello-world" ARCH="armhf" CONFIG="config-test.json"
-  - ADDON="hello-world" ARCH="armv7" CONFIG="config-test.json"
-  - ADDON="hello-world" ARCH="i386" CONFIG="config-test.json"
-  - ADDON="lego" ARCH="armv7" CONFIG="config.json"
-#END_GEN_ENV
-script:
-  - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-  - ARCHS=$ARCH ./travis.sh $ADDON
-
-after_script:
-  - echo 'After-Script'
+jobs:
+  include:
+    - stage: build
+      env: 
+#START_GEN_BUILD_ENV
+        - ADDON="golang" ARCH="aarch64" CONFIG="config.json"
+        - ADDON="golang" ARCH="amd64" CONFIG="config.json"
+        - ADDON="golang" ARCH="armhf" CONFIG="config.json"
+        - ADDON="golang" ARCH="armv7" CONFIG="config.json"
+        - ADDON="golang" ARCH="i386" CONFIG="config.json"
+        - ADDON="hello-world" ARCH="aarch64" CONFIG="config-test.json"
+        - ADDON="hello-world" ARCH="amd64" CONFIG="config-test.json"
+        - ADDON="hello-world" ARCH="armhf" CONFIG="config-test.json"
+        - ADDON="hello-world" ARCH="armv7" CONFIG="config-test.json"
+        - ADDON="hello-world" ARCH="i386" CONFIG="config-test.json"
+        - ADDON="lego" ARCH="armv7" CONFIG="config.json"
+#END_GEN_BUILD_ENV
+      script:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        - ARCHS=$ARCH ./travis-build.sh $ADDON
+    - stage: manifest
+      env:
+#START_GEN_DONE_ENV
+        - ADDON="golang" ARCHS="aarch64 amd64 armhf armv7 i386" CONFIG="config.json"
+        - ADDON="hello-world" ARCHS="aarch64 amd64 armhf armv7 i386" CONFIG="config-test.json"
+        - ADDON="lego" ARCHS="armv7" CONFIG="config.json"
+#END_GEN_DONE_ENV
+      script:
+        - ./travis-set-manifest.sh $ADDON

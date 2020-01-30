@@ -6,8 +6,6 @@ if ! [ -x "$(command -v buildctl)" ]; then
    exit 1
 fi
 
-export DOCKER_CLI_EXPERIMENTAL=enabled
-
 arch_to_platform () {
    case "$1" in 
       aarch64) PLATFORM=arm64 ;;
@@ -79,15 +77,6 @@ for ADDON in "$@"; do
                fi
             fi
          done
-
-         if [[ $DOCKER_IMAGES != "" ]]; then
-	    docker manifest create $IMAGE:$VERSION $DOCKER_IMAGES
-            for DOCKER_IMAGE in $DOCKER_IMAGES; do
-               PLATFORM=${DOCKER_IMAGE##*-}
-               docker manifest annotate $IMAGE:$VERSION $DOCKER_IMAGE --arch $PLATFORM
-            done
-            docker manifest push $IMAGE:$VERSION
-         fi
       else
          echo "skipped - missing ${CONFIG} or build.json" 
       fi
