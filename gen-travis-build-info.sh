@@ -20,10 +20,10 @@ for ADDON in $ADDONS; do
 	 LABEL="$ARCH"
          BADGE_URL="https://badges.herokuapp.com/travis/Taapie/hassio-addons?branch=${BRANCH}&label=${LABEL}&env=ADDON=%22${ADDON}%22%20ARCH=%22${ARCH}%22"
 	 BADGE_MD="[![Build Status]($BADGE_URL)](https://travis-ci.org/Taapie/hassio-addons)"
-         BADGES="$BADGE_MD\n$BADGES"
+         BADGES="${BADGE_MD}${BADGES}"
       done
 
-      sed -i -e "/<!-- START_GEN_BADGES -->/,/<!-- END_GEN_BADGES -->/c\<!-- START_GEN_BADGES -->\n$BADGES<!-- END_GEN_BADGES -->" $ADDON/README.md
+      sed -i -e "/<!-- START_GEN_BADGES -->/,/<!-- END_GEN_BADGES -->/c\<!-- START_GEN_BADGES -->\n$BADGES\n<!-- END_GEN_BADGES -->" $ADDON/README.md
    fi
 done
 
