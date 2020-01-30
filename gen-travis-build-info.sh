@@ -4,6 +4,10 @@ set -e
 BADGE_URL="https://badges.herokuapp.com/travis/Taapie/hassio-addons?branch=${BRANCH}&label=${LABEL}&env=ADDON=%22$ADDON%22%20ARCH=%22$ARCH%22"
 BRANCH=`git branch --show-current`
 
+BUILD_PART="    - stage: build\n      env:\n        - \$ENV\n      script:\n        - docker login -u \$DOCKER_USER -p \$DOCKER_PASSWORD\n        - ARCHS=\$ARCH ./travis-build.sh \$ADDON\n"
+
+DONE_PART="    - stage: manifest\n      env:\n        - \$ENV\n      script:\n        - docker login -u \$DOCKER_USER -p \$DOCKER_PASSWORD\n        - ./travis-set-mainfest.sh \$ADDON\n"
+
 ADDONS=`ls -d */ | cut -d/ -f 1`
 for ADDON in $ADDONS; do
    if [[ $ADDON == "hello-world" ]]; then
@@ -15,9 +19,9 @@ for ADDON in $ADDONS; do
    BADGES=""
    if [[ -f "${ADDON}/${CONFIG}" ]]; then 
       ARCHS=$(jq -r '.arch // ["aarch64", "amd64", "armhf", "armv7", "i386"] | [.[] | .] | sort | join(" ")' ${ADDON}/${CONFIG})
-      DONE_ENV="$DONE_ENV        - ADDON=\"$ADDON\" ARCHS=\"$ARCHS\" CONFIG=\"$CONFIG\"\n"
+      DONE_ENV="$DONE_ENV${DONE_PART/\$ENV/ADDON=\"$ADDON\" ARCHS=\"$ARCHS\" CONFIG=\"$CONFIG\"}"
       for ARCH in $ARCHS; do
-         BUILD_ENV="$BUILD_ENV        - ADDON=\"$ADDON\" ARCH=\"$ARCH\" CONFIG=\"$CONFIG\"\n"
+         BUILD_ENV="$BUILD_ENV${BUILD_PART/\$ENV/ADDON=\"$ADDON\" ARCH=\"$ARCH\" CONFIG=\"$CONFIG\"}"
 	 LABEL="$ARCH"
          BADGE_URL="https://badges.herokuapp.com/travis/Taapie/hassio-addons?branch=${BRANCH}&label=${LABEL}&env=ADDON=%22${ADDON}%22%20ARCH=%22${ARCH}%22"
 	 BADGE_MD="[![Build Status]($BADGE_URL)](https://travis-ci.org/Taapie/hassio-addons)"
@@ -29,7 +33,7 @@ for ADDON in $ADDONS; do
    fi
 done
 
-sed -i -e "/#START_GEN_BUILD_ENV/,/#END_GEN_BUILD_ENV/c\#START_GEN_BUILD_ENV\n$BUILD_ENV#END_GEN_BUILD_ENV" .travis.yml
-sed -i -e "/#START_GEN_DONE_ENV/,/#END_GEN_DONE_ENV/c\#START_GEN_DONE_ENV\n$DONE_ENV#END_GEN_DONE_ENV" .travis.yml
+sed -i -e "/#START_GEN_BUILD/,/#END_GEN_BUILD/c\#START_GEN_BUILD\n$BUILD_ENV#END_GEN_BUILD" .travis.yml
+sed -i -e "/#START_GEN_DONE/,/#END_GEN_DONE/c\#START_GEN_DONE\n$DONE_ENV#END_GEN_DONE" .travis.yml
 
 git add .travis.yml

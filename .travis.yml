@@ -15,30 +15,91 @@ before_install:
   - export BUILDKIT_HOST=tcp://0.0.0.0:1234
 jobs:
   include:
+#START_GEN_BUILD
     - stage: build
-      env: 
-#START_GEN_BUILD_ENV
+      env:
         - ADDON="golang" ARCH="aarch64" CONFIG="config.json"
-        - ADDON="golang" ARCH="amd64" CONFIG="config.json"
-        - ADDON="golang" ARCH="armhf" CONFIG="config.json"
-        - ADDON="golang" ARCH="armv7" CONFIG="config.json"
-        - ADDON="golang" ARCH="i386" CONFIG="config.json"
-        - ADDON="hello-world" ARCH="aarch64" CONFIG="config-test.json"
-        - ADDON="hello-world" ARCH="amd64" CONFIG="config-test.json"
-        - ADDON="hello-world" ARCH="armhf" CONFIG="config-test.json"
-        - ADDON="hello-world" ARCH="armv7" CONFIG="config-test.json"
-        - ADDON="hello-world" ARCH="i386" CONFIG="config-test.json"
-        - ADDON="lego" ARCH="armv7" CONFIG="config.json"
-#END_GEN_BUILD_ENV
       script:
         - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
         - ARCHS=$ARCH ./travis-build.sh $ADDON
+    - stage: build
+      env:
+        - ADDON="golang" ARCH="amd64" CONFIG="config.json"
+      script:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        - ARCHS=$ARCH ./travis-build.sh $ADDON
+    - stage: build
+      env:
+        - ADDON="golang" ARCH="armhf" CONFIG="config.json"
+      script:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        - ARCHS=$ARCH ./travis-build.sh $ADDON
+    - stage: build
+      env:
+        - ADDON="golang" ARCH="armv7" CONFIG="config.json"
+      script:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        - ARCHS=$ARCH ./travis-build.sh $ADDON
+    - stage: build
+      env:
+        - ADDON="golang" ARCH="i386" CONFIG="config.json"
+      script:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        - ARCHS=$ARCH ./travis-build.sh $ADDON
+    - stage: build
+      env:
+        - ADDON="hello-world" ARCH="aarch64" CONFIG="config-test.json"
+      script:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        - ARCHS=$ARCH ./travis-build.sh $ADDON
+    - stage: build
+      env:
+        - ADDON="hello-world" ARCH="amd64" CONFIG="config-test.json"
+      script:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        - ARCHS=$ARCH ./travis-build.sh $ADDON
+    - stage: build
+      env:
+        - ADDON="hello-world" ARCH="armhf" CONFIG="config-test.json"
+      script:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        - ARCHS=$ARCH ./travis-build.sh $ADDON
+    - stage: build
+      env:
+        - ADDON="hello-world" ARCH="armv7" CONFIG="config-test.json"
+      script:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        - ARCHS=$ARCH ./travis-build.sh $ADDON
+    - stage: build
+      env:
+        - ADDON="hello-world" ARCH="i386" CONFIG="config-test.json"
+      script:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        - ARCHS=$ARCH ./travis-build.sh $ADDON
+    - stage: build
+      env:
+        - ADDON="lego" ARCH="armv7" CONFIG="config.json"
+      script:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        - ARCHS=$ARCH ./travis-build.sh $ADDON
+#END_GEN_BUILD
+#START_GEN_DONE
     - stage: manifest
       env:
-#START_GEN_DONE_ENV
         - ADDON="golang" ARCHS="aarch64 amd64 armhf armv7 i386" CONFIG="config.json"
-        - ADDON="hello-world" ARCHS="aarch64 amd64 armhf armv7 i386" CONFIG="config-test.json"
-        - ADDON="lego" ARCHS="armv7" CONFIG="config.json"
-#END_GEN_DONE_ENV
       script:
-        - ./travis-set-manifest.sh $ADDON
+        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        - ./travis-set-mainfest.sh $ADDON
+    - stage: manifest
+      env:
+        - ADDON="hello-world" ARCHS="aarch64 amd64 armhf armv7 i386" CONFIG="config-test.json"
+      script:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        - ./travis-set-mainfest.sh $ADDON
+    - stage: manifest
+      env:
+        - ADDON="lego" ARCHS="armv7" CONFIG="config.json"
+      script:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        - ./travis-set-mainfest.sh $ADDON
+#END_GEN_DONE
