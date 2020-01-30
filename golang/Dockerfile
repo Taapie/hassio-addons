@@ -14,6 +14,7 @@ ENV GO111MODULE=on
 WORKDIR /data
 
 RUN apk add --no-cache --virtual .builddeps wget
+RUN apk add --no-cache libc6-compat
 RUN case "${BUILD_ARCH}" in \
          aarch64) goArch='arm64'; goRelArch='linux-arm64'; goRelSha256='0a18125c4ed80f9c3045cf92384670907c4796b43ed63c4307210fe93e5bbca5'; ;; \
          amd64) goArch='amd64'; goRelArch='linux-amd64'; goRelSha256='a1bc06deb070155c4f67c579f896a45eeda5a8fa54f35ba233304074c4abbbbd'; ;; \
@@ -28,9 +29,9 @@ RUN case "${BUILD_ARCH}" in \
     tar -C /usr/local -xzf go.tgz  &&\
     rm go.tgz 
 
-#RUN apk del .builddeps && \
-#    rm -rf /var/lib/apt/lists/* && \
-#    rm -rf /root/.cache
+RUN apk del .builddeps && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /root/.cache
 
 COPY run.sh /
 RUN chmod a+x /run.sh
