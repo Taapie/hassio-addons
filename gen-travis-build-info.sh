@@ -12,10 +12,10 @@ DONE_PART="    - stage: manifest\n      env:\n        - \$ENV\n      script:\n  
 
 ADDONS=`ls -d */ | cut -d/ -f 1`
 for ADDON in $ADDONS; do
-   if [[ $ADDON == "hello-world" ]]; then
-      CONFIG="config-test.json"
-   else
+   if [[ -f "${ADDON}/config.json" ]]; then 
       CONFIG="config.json"
+   else
+      CONFIG="config-hidden.json"
    fi
 
    BADGES=""
