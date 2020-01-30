@@ -30,3 +30,6 @@ env:
 script:
   - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
   - ARCHS=$ARCH ./travis.sh $ADDON
+
+after_script:
+  - echo 'After-Script'

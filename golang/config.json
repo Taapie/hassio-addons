@@ -8,5 +8,6 @@
   "startup": "before",
   "boot": "auto",
   "options": {},
-  "schema": {}
+  "schema": {},
+  "ports": {}
 }

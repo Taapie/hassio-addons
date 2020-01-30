@@ -10,10 +10,10 @@ export DOCKER_CLI_EXPERIMENTAL=enabled
 
 arch_to_platform () {
    case "$1" in 
+      aarch64) PLATFORM=arm64 ;;
       amd64) PLATFORM=amd64 ;;
       armhf) PLATFORM=arm ;;
       armv7) PLATFORM=arm ;;
-      aarch64) PLATFORM=arm64 ;;
       i386) PLATFORM=386 ;;
       *) echo "Unknown architecture '${ARCH}'"; exit 1 ;;
    esac
@@ -32,7 +32,7 @@ for ADDON in "$@"; do
    if [[ ${BUILD,,} == "true" ]] || [[ -z ${TRAVIS_COMMIT_RANGE} ]] || git diff --name-only ${TRAVIS_COMMIT_RANGE} | grep -v README.md | grep -q ${ADDON}; then
       if [[ -f "${ADDON}/${CONFIG}" ]] && [[ -f "${ADDON}/build.json" ]]; then 
          if [[ $ARCHS == "" ]]; then
-            ARCHS=$(jq -r '.arch // ["armv7", "armhf", "amd64", "aarch64", "i386"] | [.[] | .] | join(" ")' ${ADDON}/${CONFIG})
+            ARCHS=$(jq -r '.arch // ["aarch64", "amd64", "armv7", "armhf", "i386"] | [.[] | .] | sort | join(" ")' ${ADDON}/${CONFIG})
 	 fi
          VERSION=$(jq -r '.version' ${ADDON}/${CONFIG})
          IMAGE=$(jq -r '.image' ${ADDON}/${CONFIG})

@@ -9,7 +9,7 @@ fi
 ADDON=$1
 CMD=$2
 echo "*****************************************************************************"
-echo "Runing addon ${ADDON}... "
+echo "Running addon ${ADDON}... "
 if [[ -f "${ADDON}/${CONFIG}" ]]; then 
    VERSION=$(jq -r '.version' ${ADDON}/${CONFIG})
    IMAGE=$(jq -r '.image' ${ADDON}/${CONFIG})
