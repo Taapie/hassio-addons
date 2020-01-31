@@ -1,0 +1,5 @@
+{
+  "build_from": {
+    "armv7": "hectormolinero/lego:v29-arm32v7"
+  }
+}

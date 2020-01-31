@@ -1,0 +1,30 @@
+{
+  "name": "Lego",
+  "version": "3.2.0",
+  "slug": "lego",
+  "description": "Let’s Encrypt client and ACME library written in Go",
+  "arch": ["armv7"],
+  "image": "taapie/hassio-{arch}-lego",
+  "startup": "before",
+  "boot": "auto",
+  "url": "https://go-acme.github.io/lego",
+  "map": [
+    "config:rw",
+    "share:ro",
+    "ssl:rw"
+  ],
+  "options": { 
+    "email": "name@domain.com",
+    "domains": [],
+    "dns": "",
+    "env": [],
+    "interval": 24
+  },
+  "schema": {
+    "email": "email",
+    "domains": [ "str" ],
+    "dns": "str",
+    "env": [ "str" ],
+    "interval": "int(1,)"
+  }
+}
