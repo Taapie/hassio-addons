@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2018 Dennis Taapken <dennis@lioncode.nl>
+Copyright (c) 2021 Dennis Taapken <dennis@lioncode.nl>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
