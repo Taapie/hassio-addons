@@ -6,7 +6,7 @@ PWD=`pwd`
 EXTRA_ENV="$*"
 
 BADGE_URL="https://badges.herokuapp.com/travis/Taapie/hassio-addons?branch=${BRANCH}&label=${LABEL}&env=ADDON=%22$ADDON%22%20ARCH=%22$ARCH%22"
-BRANCH=`git branch --show-current`
+BRANCH=`git rev-parse --abbrev-ref HEAD`
 
 BUILD_PART="    - stage: build\n      env:\n        - \$ENV\n      script:\n        - docker login -u \$DOCKER_USER -p \$DOCKER_PASSWORD\n        - ARCHS=\$ARCH ./scripts/travis-build.sh \$ADDON\n"
 
