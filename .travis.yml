@@ -18,88 +18,16 @@ jobs:
 #START_GEN_BUILD
     - stage: build
       env:
-        - ADDON="golang" ARCH="aarch64" CONFIG="config-hidden.json" 
-      script:
-        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-        - ARCHS=$ARCH ./travis-build.sh $ADDON
-    - stage: build
-      env:
-        - ADDON="golang" ARCH="amd64" CONFIG="config-hidden.json" 
-      script:
-        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-        - ARCHS=$ARCH ./travis-build.sh $ADDON
-    - stage: build
-      env:
-        - ADDON="golang" ARCH="armhf" CONFIG="config-hidden.json" 
-      script:
-        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-        - ARCHS=$ARCH ./travis-build.sh $ADDON
-    - stage: build
-      env:
-        - ADDON="golang" ARCH="armv7" CONFIG="config-hidden.json" 
-      script:
-        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-        - ARCHS=$ARCH ./travis-build.sh $ADDON
-    - stage: build
-      env:
-        - ADDON="golang" ARCH="i386" CONFIG="config-hidden.json" 
-      script:
-        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-        - ARCHS=$ARCH ./travis-build.sh $ADDON
-    - stage: build
-      env:
-        - ADDON="hello-world" ARCH="aarch64" CONFIG="config-hidden.json" 
-      script:
-        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-        - ARCHS=$ARCH ./travis-build.sh $ADDON
-    - stage: build
-      env:
-        - ADDON="hello-world" ARCH="amd64" CONFIG="config-hidden.json" 
-      script:
-        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-        - ARCHS=$ARCH ./travis-build.sh $ADDON
-    - stage: build
-      env:
-        - ADDON="hello-world" ARCH="armhf" CONFIG="config-hidden.json" 
-      script:
-        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-        - ARCHS=$ARCH ./travis-build.sh $ADDON
-    - stage: build
-      env:
-        - ADDON="hello-world" ARCH="armv7" CONFIG="config-hidden.json" 
-      script:
-        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-        - ARCHS=$ARCH ./travis-build.sh $ADDON
-    - stage: build
-      env:
-        - ADDON="hello-world" ARCH="i386" CONFIG="config-hidden.json" 
-      script:
-        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-        - ARCHS=$ARCH ./travis-build.sh $ADDON
-    - stage: build
-      env:
         - ADDON="lego" ARCH="armv7" CONFIG="config.json" 
       script:
         - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-        - ARCHS=$ARCH ./travis-build.sh $ADDON
+        - ARCHS=$ARCH ./scripts/travis-build.sh $ADDON
 #END_GEN_BUILD
 #START_GEN_DONE
-    - stage: manifest
-      env:
-        - ADDON="golang" ARCHS="aarch64 amd64 armhf armv7 i386" CONFIG="config-hidden.json" 
-      script:
-        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-        - ./travis-set-manifest.sh $ADDON
-    - stage: manifest
-      env:
-        - ADDON="hello-world" ARCHS="aarch64 amd64 armhf armv7 i386" CONFIG="config-hidden.json" 
-      script:
-        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-        - ./travis-set-manifest.sh $ADDON
     - stage: manifest
       env:
         - ADDON="lego" ARCHS="armv7" CONFIG="config.json" 
       script:
         - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-        - ./travis-set-manifest.sh $ADDON
+        - ./scripts/travis-set-manifest.sh $ADDON
 #END_GEN_DONE
