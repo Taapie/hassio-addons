@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
+PWD=`pwd`
+
 CONFIG="config.json"
 
 # Determine local machine architecture
@@ -14,11 +16,12 @@ fi
 
 ARCHS="${LOCAL_ARCH}"
 for ADDON in "$@"; do
+   ADDON_DIR="${PWD}/${ADDON}"
    echo "*****************************************************************************"
    echo "Building addon ${ADDON}... "
-      if [[ -f "${ADDON}/${CONFIG}" ]] && [[ -f "${ADDON}/build.json" ]]; then 
-         VERSION=$(jq -r '.version' ${ADDON}/${CONFIG})
-         IMAGE=$(jq -r '.image' ${ADDON}/${CONFIG})
+      if [[ -f "${ADDON_DIR}/${CONFIG}" ]] && [[ -f "${ADDON_DIR}/build.json" ]]; then 
+         VERSION=$(jq -r '.version' ${ADDON_DIR}/${CONFIG})
+         IMAGE=$(jq -r '.image' ${ADDON_DIR}/${CONFIG})
 
          for ARCH in $ARCHS; do
             echo "============================================================================="
@@ -29,7 +32,7 @@ for ADDON in "$@"; do
 
             BUILD_ARCH=${ARCH}
             BUILD_VERSION=${VERSION}
-            BUILD_FROM=$(jq -r ".build_from .${ARCH}" ${ADDON}/build.json)
+            BUILD_FROM=$(jq -r ".build_from .${ARCH}" ${ADDON_DIR}/build.json)
 
             if [[ ${BUILD_FROM} == "null" ]]; then 
                echo "skipped - missing BUILD config in build.json for '${ARCH}'"
@@ -38,7 +41,7 @@ for ADDON in "$@"; do
 		            --build-arg BUILD_ARCH=${BUILD_ARCH} \
 		            --build-arg BUILD_VERSION=${BUILD_VERSION} \
 		            --build-arg BUILD_FROM=${BUILD_FROM} \
-			    $ADDON
+			    $ADDON_DIR
             fi
          done
       else

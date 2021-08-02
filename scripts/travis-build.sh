@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
+PWD=`pwd`
+
 if ! [ -x "$(command -v buildctl)" ]; then
    echo 'Missing buildctl - can not build on this system' >&2
    exit 1
@@ -25,15 +27,17 @@ if [[ $CONFIG == "" ]]; then
 fi
 
 for ADDON in "$@"; do
+   ADDON_DIR="${PWD}/${ADDON}"
+
    echo "*****************************************************************************"
    echo "Building addon ${ADDON}... "
    if [[ ${BUILD,,} == "true" ]] || [[ -z ${TRAVIS_COMMIT_RANGE} ]] || git diff --name-only ${TRAVIS_COMMIT_RANGE} | grep -v README.md | grep -q ${ADDON}; then
-      if [[ -f "${ADDON}/${CONFIG}" ]] && [[ -f "${ADDON}/build.json" ]]; then 
+      if [[ -f "${ADDON_DIR}/${CONFIG}" ]] && [[ -f "${ADDON_DIR}/build.json" ]]; then 
          if [[ $ARCHS == "" ]]; then
-            ARCHS=$(jq -r '.arch // ["aarch64", "amd64", "armv7", "armhf", "i386"] | [.[] | .] | sort | join(" ")' ${ADDON}/${CONFIG})
+            ARCHS=$(jq -r '.arch // ["aarch64", "amd64", "armv7", "armhf", "i386"] | [.[] | .] | sort | join(" ")' ${ADDON_DIR}/${CONFIG})
 	 fi
-         VERSION=$(jq -r '.version' ${ADDON}/${CONFIG})
-         IMAGE=$(jq -r '.image' ${ADDON}/${CONFIG})
+         VERSION=$(jq -r '.version' ${ADDON_DIR}/${CONFIG})
+         IMAGE=$(jq -r '.image' ${ADDON_DIR}/${CONFIG})
 
 	 DOCKER_IMAGES=""
          for ARCH in $ARCHS; do
@@ -54,14 +58,14 @@ for ADDON in "$@"; do
 
 	       BUILD_ARCH=${ARCH}
 	       BUILD_VERSION=${VERSION}
-               BUILD_FROM=$(jq -r ".build_from .${ARCH}" ${ADDON}/build.json)
+               BUILD_FROM=$(jq -r ".build_from .${ARCH}" ${ADDON_DIR}/build.json)
 
                if [[ ${BUILD_FROM} == "null" ]]; then 
                   echo "skipped - missing BUILD config in build.json for '${ARCH}'"
                else
                   buildctl build --frontend dockerfile.v0 \
-                                 --local dockerfile=${ADDON} \
-                                 --local context=${ADDON} \
+                                 --local dockerfile=${ADDON_DIR} \
+                                 --local context=${ADDON_DIR} \
                                  --output type=image,name=docker.io/${DOCKER_IMAGE}:${DOCKER_LATEST_TAG},push=true \
 			         --export-cache type=inline \
 			         --import-cache type=registry,ref=docker.io/${DOCKER_IMAGE}:${DOCKER_LATEST_TAG} \

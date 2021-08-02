@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
+PWD=`pwd`
+
 export DOCKER_CLI_EXPERIMENTAL=enabled
 
 arch_to_platform () {
@@ -22,15 +24,17 @@ if [[ $CONFIG == "" ]]; then
 fi
 
 for ADDON in "$@"; do
+   ADDON_DIR="${PWD}/${ADDON}"
+
    if [[ ${BUILD,,} == "true" ]] || [[ -z ${TRAVIS_COMMIT_RANGE} ]] || git diff --name-only ${TRAVIS_COMMIT_RANGE} | grep -v README.md | grep -q ${ADDON}; then
       echo "============================================================================="
       echo "Setting manifest for addon $ADDON"
-      if [[ -f "${ADDON}/${CONFIG}" ]]; then 
+      if [[ -f "${ADDON_DIR}/${CONFIG}" ]]; then 
          if [[ $ARCHS == "" ]]; then
-            ARCHS=$(jq -r '.arch // ["aarch64", "amd64", "armv7", "armhf", "i386"] | [.[] | .] | sort | join(" ")' ${ADDON}/${CONFIG})
+            ARCHS=$(jq -r '.arch // ["aarch64", "amd64", "armv7", "armhf", "i386"] | [.[] | .] | sort | join(" ")' ${ADDON_DIR}/${CONFIG})
 	 fi
-         VERSION=$(jq -r '.version' ${ADDON}/${CONFIG})
-         IMAGE=$(jq -r '.image' ${ADDON}/${CONFIG})
+         VERSION=$(jq -r '.version' ${ADDON_DIR}/${CONFIG})
+         IMAGE=$(jq -r '.image' ${ADDON_DIR}/${CONFIG})
 
 	 DOCKER_IMAGES=""
          for ARCH in $ARCHS; do

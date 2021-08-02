@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
+PWD=`pwd`
+
 if [[ $CONFIG == "" ]]; then
    echo Using default config file
    CONFIG="config.json"
@@ -10,25 +12,26 @@ ADDON=$1
 CMD=$2
 echo "*****************************************************************************"
 echo "Running addon ${ADDON}... "
-if [[ -f "${ADDON}/${CONFIG}" ]]; then 
-   VERSION=$(jq -r '.version' ${ADDON}/${CONFIG})
-   IMAGE=$(jq -r '.image' ${ADDON}/${CONFIG})
+ADDON_DIR="${PWD}/${ADDON}"
+if [[ -f "${ADDON_DIR}/${CONFIG}" ]]; then 
+   VERSION=$(jq -r '.version' ${ADDON_DIR}/${CONFIG})
+   IMAGE=$(jq -r '.image' ${ADDON_DIR}/${CONFIG})
 
    EXTRA_DOCKER_ARGS=""
 
-   HOST_NETWORK=$(jq -r '.host_network' ${ADDON}/${CONFIG})
+   HOST_NETWORK=$(jq -r '.host_network' ${ADDON_DIR}/${CONFIG})
    if [[ ${HOST_NETWORK,,} == "true" ]]; then
       EXTRA_DOCKER_ARGS="--net host $EXTRA_DOCKER_ARGS"
    fi
 
-   FULL_ACCESS=$(jq -r '.full_access' ${ADDON}/${CONFIG})
+   FULL_ACCESS=$(jq -r '.full_access' ${ADDON_DIR}/${CONFIG})
    if [[ ${FULL_ACCESS,,} == "true" ]]; then
       EXTRA_DOCKER_ARGS="--privileged $EXTRA_DOCKER_ARGS"
    fi
 
-   MAP=$(jq -r '.map' ${ADDON}/${CONFIG})
+   MAP=$(jq -r '.map' ${ADDON_DIR}/${CONFIG})
    if [[ $MAP != "null" ]]; then
-      MAPS=$(jq -r '.map | .[]' ${ADDON}/${CONFIG})
+      MAPS=$(jq -r '.map | .[]' ${ADDON_DIR}/${CONFIG})
       for MAP in $MAPS; do
          MAP=(${MAP//:/ })
 
@@ -51,9 +54,9 @@ if [[ -f "${ADDON}/${CONFIG}" ]]; then
       done
    fi
 
-   PORTS=$(jq -r '.ports' ${ADDON}/${CONFIG})
+   PORTS=$(jq -r '.ports' ${ADDON_DIR}/${CONFIG})
    if [[ $PORTS != "null" ]]; then
-      PORTS=$(jq -r '.ports | to_entries[] | "\(.key):\(.value)"' ${ADDON}/${CONFIG})
+      PORTS=$(jq -r '.ports | to_entries[] | "\(.key):\(.value)"' ${ADDON_DIR}/${CONFIG})
       for PORT in $PORTS; do
          PORT=(${PORT//:/ })
 
@@ -63,9 +66,9 @@ if [[ -f "${ADDON}/${CONFIG}" ]]; then
       done
    fi
 
-   DEVICES=$(jq -r '.devices' ${ADDON}/${CONFIG})
+   DEVICES=$(jq -r '.devices' ${ADDON_DIR}/${CONFIG})
    if [[ $DEVICES != "null" ]]; then
-      DEVICES=$(jq -r '.devices | .[]' ${ADDON}/${CONFIG})
+      DEVICES=$(jq -r '.devices | .[]' ${ADDON_DIR}/${CONFIG})
       for DEVICE in $DEVICES; do
          EXTRA_DOCKER_ARGS="--device=${DEVICE} $EXTRA_DOCKER_ARGS"
       done
