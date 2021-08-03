@@ -7,7 +7,7 @@
   "image": "taapie/hassio-influxdb2",
   "startup": "services",
   "boot": "auto",
-  "url": "https://docs.influxdata.com/influxdb/v2.0",`
+  "url": "https://docs.influxdata.com/influxdb/v2.0",
   "map": [
     "share:rw"
   ],
