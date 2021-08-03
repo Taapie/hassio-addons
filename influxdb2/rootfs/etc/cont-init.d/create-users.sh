@@ -1,6 +1,6 @@
 #!/usr/bin/with-contenv bashio
 # ==============================================================================
-# Home Assistant Community Add-on: InfluxDB
+# Home Assistant Community Add-on: InfluxDB v2
 # Ensure a user for Chronograf & Kapacitor exists within InfluxDB
 # ==============================================================================
 declare secret
