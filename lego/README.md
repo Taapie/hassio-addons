@@ -28,7 +28,8 @@ Lego add-on configuration:
   "dns": "transip",
   "env": [
     "TRANSIP_BLA=value"
-  ]
+  ],
+  "interval": 24
 }
 ```
 
