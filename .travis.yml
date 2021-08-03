@@ -22,7 +22,7 @@ jobs:
 #START_GEN_BUILD
     - stage: build
       env:
-        - BUILD="true ADDON="influxdb2" ARCH="amd64" CONFIG="config.json" 
+        - BUILD="true" ADDON="influxdb2" ARCH="amd64" CONFIG="config.json" 
       script:
         - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
         - ARCHS=$ARCH ./scripts/travis-build.sh $ADDON
