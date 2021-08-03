@@ -9,8 +9,8 @@ addons:
 services:
   - docker
 before_install:
-  - sudo docker run --privileged linuxkit/binfmt:v0.7
-  - sudo docker run -d --privileged -p 1234:1234 --name buildkit moby/buildkit:latest --addr tcp://0.0.0.0:1234 --oci-worker-platform linux/amd64 --oci-worker-platform linux/armhf --oci-worker-platform linux/arm64 --oci-worker-platform linux/386
+  - sudo docker run --privileged linuxkit/binfmt:v0.8
+  - sudo docker run -d --privileged -p 1234:1234 --name buildkit moby/buildkit:v0.8.3 --addr tcp://0.0.0.0:1234 --oci-worker-platform linux/amd64 --oci-worker-platform linux/armhf --oci-worker-platform linux/arm64 --oci-worker-platform linux/386
   - sudo docker cp buildkit:/usr/bin/buildctl /usr/bin/
   - export BUILDKIT_HOST=tcp://0.0.0.0:1234
 branches:
@@ -34,7 +34,7 @@ jobs:
         - ARCHS=$ARCH ./scripts/travis-build.sh $ADDON
     - stage: build
       env:
-        - ADDON="lego" ARCH="armv7" CONFIG="config.json" 
+        - BUILD="true" ADDON="lego" ARCH="armv7" CONFIG="config.json" 
       script:
         - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
         - ARCHS=$ARCH ./scripts/travis-build.sh $ADDON
