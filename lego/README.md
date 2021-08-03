@@ -14,8 +14,6 @@ Lego is a tool that implements this DNS challenge type for a lot of DNS services
 
 ## Configuration
 
-**Note**: _Remember to restart the add-on when the configuration is changed._
-
 Lego add-on configuration:
 
 ```json
