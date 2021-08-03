@@ -22,12 +22,42 @@ jobs:
 #START_GEN_BUILD
     - stage: build
       env:
+        - ADDON="influxdb2" ARCH="aarch64" CONFIG="config.json" 
+      script:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        - ARCHS=$ARCH ./scripts/travis-build.sh $ADDON
+    - stage: build
+      env:
+        - ADDON="influxdb2" ARCH="amd64" CONFIG="config.json" 
+      script:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        - ARCHS=$ARCH ./scripts/travis-build.sh $ADDON
+    - stage: build
+      env:
+        - ADDON="influxdb2" ARCH="armv7" CONFIG="config.json" 
+      script:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        - ARCHS=$ARCH ./scripts/travis-build.sh $ADDON
+    - stage: build
+      env:
+        - ADDON="influxdb2" ARCH="i386" CONFIG="config.json" 
+      script:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        - ARCHS=$ARCH ./scripts/travis-build.sh $ADDON
+    - stage: build
+      env:
         - ADDON="lego" ARCH="armv7" CONFIG="config.json" 
       script:
         - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
         - ARCHS=$ARCH ./scripts/travis-build.sh $ADDON
 #END_GEN_BUILD
 #START_GEN_DONE
+    - stage: manifest
+      env:
+        - ADDON="influxdb2" ARCHS="aarch64 amd64 armv7 i386" CONFIG="config.json" 
+      script:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        - ./scripts/travis-set-manifest.sh $ADDON
     - stage: manifest
       env:
         - ADDON="lego" ARCHS="armv7" CONFIG="config.json" 
