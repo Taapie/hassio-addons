@@ -20,7 +20,7 @@ Lego add-on configuration:
 
 ```json
 {
-  "email": "name@domain.com"
+  "email": "name@domain.com",
   "domains": [
     "hassio.domain.com",
     "cloud9.domain.com"
@@ -28,7 +28,7 @@ Lego add-on configuration:
   "dns": "transip",
   "env": [
     "TRANSIP_BLA=value"
-  ],
+  ]
 }
 ```
 
