@@ -46,6 +46,9 @@ RUN cd influxdb \
     && . $HOME/.cargo/env \
     && make
 
+# Copy root filesystem
+COPY rootfs /
+
 # Build arguments
 ARG BUILD_ARCH
 ARG BUILD_DATE
