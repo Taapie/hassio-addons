@@ -5,7 +5,7 @@ PWD=`pwd`
 
 EXTRA_ENV="$*"
 
-BADGE_URL="https://badges.herokuapp.com/travis/Taapie/hassio-addons?branch=${BRANCH}&label=${LABEL}&env=ADDON=%22$ADDON%22%20ARCH=%22$ARCH%22"
+BADGE_URL="https://badges.herokuapp.com/travis.com/Taapie/hassio-addons?branch=${BRANCH}&label=${LABEL}&env=ADDON=%22$ADDON%22%20ARCH=%22$ARCH%22"
 BRANCH=`git rev-parse --abbrev-ref HEAD`
 
 BUILD_PART="    - stage: build\n      env:\n        - \$ENV\n      script:\n        - docker login -u \$DOCKER_USER -p \$DOCKER_PASSWORD\n        - ARCHS=\$ARCH ./scripts/travis-build.sh \$ADDON\n"
@@ -28,8 +28,8 @@ for ADDON in $ADDONS; do
       for ARCH in $ARCHS; do
          BUILD_ENV="$BUILD_ENV${BUILD_PART/\$ENV/ADDON=\"$ADDON\" ARCH=\"$ARCH\" CONFIG=\"$CONFIG\" ${EXTRA_ENV}}"
 	 LABEL="$ARCH"
-         BADGE_URL="https://badges.herokuapp.com/travis/Taapie/hassio-addons?branch=${BRANCH}&label=${LABEL}&env=ADDON=%22${ADDON}%22%20ARCH=%22${ARCH}%22"
-	 BADGE_MD="[![Build Status]($BADGE_URL)](https://travis-ci.org/Taapie/hassio-addons)"
+         BADGE_URL="https://badges.herokuapp.com/travis.com/Taapie/hassio-addons?branch=${BRANCH}&label=${LABEL}&env=ADDON=%22${ADDON}%22%20ARCH=%22${ARCH}%22"
+	 BADGE_MD="[![Build Status]($BADGE_URL)](https://travis-ci.com/Taapie/hassio-addons)"
          BADGES="${BADGES} ${BADGE_MD}"
       done
 
