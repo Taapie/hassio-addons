@@ -1,0 +1,26 @@
+{
+  "name": "NZBGet",
+  "version": "v21.1-ls83-0.1",
+  "slug": "nzbget",
+  "description": "Efficient Usenet downloader",
+  "arch": ["armv7"],
+  "image": "taapie/hassio-nzbget",
+  "startup": "services",
+  "boot": "auto",
+  "url": "https://nzbget.net/",
+  "map": [
+    "config:rw",
+    "share:rw",
+    "ssl:ro"
+  ],
+  "ports": {
+    "6789/tcp": 6789
+  },
+  "ports_description": {
+    "6789/tcp": "Web interface"
+  },
+  "options": {
+  },
+  "schema": {
+  }
+}

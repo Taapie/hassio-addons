@@ -26,11 +26,23 @@ jobs:
       script:
         - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
         - ARCHS=$ARCH ./scripts/travis-build.sh $ADDON
+    - stage: build
+      env:
+        - ADDON="nzbget" ARCH="armv7" CONFIG="config.json" 
+      script:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        - ARCHS=$ARCH ./scripts/travis-build.sh $ADDON
 #END_GEN_BUILD
 #START_GEN_DONE
     - stage: manifest
       env:
         - ADDON="lego" ARCHS="armv7" CONFIG="config.json" 
+      script:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        - ./scripts/travis-set-manifest.sh $ADDON
+    - stage: manifest
+      env:
+        - ADDON="nzbget" ARCHS="armv7" CONFIG="config.json" 
       script:
         - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
         - ./scripts/travis-set-manifest.sh $ADDON
