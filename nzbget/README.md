@@ -2,7 +2,7 @@
 This add-on allows you to run NZBGet to download files from Usenet.
 
 <!-- START_GEN_BADGES -->
- [![Build Status](https://badges.herokuapp.com/travis.com/Taapie/hassio-addons?branch=feature/nzbget&label=armv7&env=ADDON=%22nzbget%22%20ARCH=%22armv7%22)](https://travis-ci.com/Taapie/hassio-addons)
+ [![Build Status](https://badges.herokuapp.com/travis.com/Taapie/hassio-addons?branch=master&label=aarch64&env=ADDON=%22nzbget%22%20ARCH=%22aarch64%22)](https://travis-ci.com/Taapie/hassio-addons) [![Build Status](https://badges.herokuapp.com/travis.com/Taapie/hassio-addons?branch=master&label=amd64&env=ADDON=%22nzbget%22%20ARCH=%22amd64%22)](https://travis-ci.com/Taapie/hassio-addons) [![Build Status](https://badges.herokuapp.com/travis.com/Taapie/hassio-addons?branch=master&label=armhf&env=ADDON=%22nzbget%22%20ARCH=%22armhf%22)](https://travis-ci.com/Taapie/hassio-addons) [![Build Status](https://badges.herokuapp.com/travis.com/Taapie/hassio-addons?branch=master&label=armv7&env=ADDON=%22nzbget%22%20ARCH=%22armv7%22)](https://travis-ci.com/Taapie/hassio-addons)
 <!-- END_GEN_BADGES -->
 
 ## About

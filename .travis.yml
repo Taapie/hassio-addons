@@ -28,6 +28,24 @@ jobs:
         - ARCHS=$ARCH ./scripts/travis-build.sh $ADDON
     - stage: build
       env:
+        - ADDON="nzbget" ARCH="aarch64" CONFIG="config.json" 
+      script:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        - ARCHS=$ARCH ./scripts/travis-build.sh $ADDON
+    - stage: build
+      env:
+        - ADDON="nzbget" ARCH="amd64" CONFIG="config.json" 
+      script:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        - ARCHS=$ARCH ./scripts/travis-build.sh $ADDON
+    - stage: build
+      env:
+        - ADDON="nzbget" ARCH="armhf" CONFIG="config.json" 
+      script:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        - ARCHS=$ARCH ./scripts/travis-build.sh $ADDON
+    - stage: build
+      env:
         - ADDON="nzbget" ARCH="armv7" CONFIG="config.json" 
       script:
         - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
@@ -42,7 +60,7 @@ jobs:
         - ./scripts/travis-set-manifest.sh $ADDON
     - stage: manifest
       env:
-        - ADDON="nzbget" ARCHS="armv7" CONFIG="config.json" 
+        - ADDON="nzbget" ARCHS="aarch64 amd64 armhf armv7" CONFIG="config.json" 
       script:
         - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
         - ./scripts/travis-set-manifest.sh $ADDON
