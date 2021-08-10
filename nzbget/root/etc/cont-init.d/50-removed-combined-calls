@@ -1,0 +1,8 @@
+#!/usr/bin/with-contenv bash
+
+sed -i "s|^.*%if-debug%.*$||g" /app/nzbget/webui/index.html
+sed -i "s|^.*%if-not-debug%.*$||g" /app/nzbget/webui/index.html
+sed -i "s|^.*%end%.*$||g" /app/nzbget/webui/index.html
+
+sed -i "s|^.*combined\.js.*$||g" /app/nzbget/webui/index.html
+sed -i "s|^.*combined\.css.*$||g" /app/nzbget/webui/index.html
