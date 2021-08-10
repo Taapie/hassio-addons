@@ -1,9 +1,9 @@
 {
   "name": "NZBGet",
-  "version": "v21.1-ls89",
+  "version": "0.1",
   "slug": "nzbget",
   "description": "Efficient Usenet downloader",
-  "arch": ["armv7"],
+  "arch": ["armhf", "armv7", "aarch64", "amd64"],
   "url": "https://nzbget.net/",
   "startup": "application",
   "ports": {
@@ -17,19 +17,23 @@
     "share:rw",
     "ssl:ro"
   ],
+  "environment": {
+    "PUID": "1000",
+    "PGID": "1000"
+  },
   "options": {
+    "TZ": "Europe/Amsterdam"
   },
   "schema": {
+    "TZ": "str?"
   },
-  "image": "taapie/hassio-nzbget",
   "ingress": true,
-  "ingress_port": 8099,
+  "ingress_port": 6789,
   "panel_icon": "mdi:puzzle",
   "panel_title": "NZBGet",
   "panel_admin": true,
   "backup": "hot",
   "backup_pre": "",
   "backup_post": "",
-  "backup_exclude": "",
-  "watchdog": ""
+  "backup_exclude": ""
 }

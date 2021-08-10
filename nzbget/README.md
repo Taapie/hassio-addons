@@ -1,7 +1,4 @@
 # NZBGet: Efficient Usenet downloader
-  https://nzbget.net/
-
-
 This add-on allows you to run NZBGet to download files from Usenet.
 
 <!-- START_GEN_BADGES -->
@@ -14,9 +11,12 @@ NZBGet is a tool that is able to download file from Usenet servers. This addon b
 
 ## Configuration
 
-NZBGet add-on configuration:
+Example configuration:
 
 ```json
 {
+   "TZ": "Europe/London"
 }
 ```
+
+Using TZ you can set your own timezone, which is used in the scheduling options of NZBGet. You can find the available options for TZ on [Wikipedia](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) under the column 'TZ database name'.

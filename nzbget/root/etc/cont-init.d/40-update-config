@@ -1,0 +1,8 @@
+#!/usr/bin/with-contenv bash
+CONFIG_PATH=/data/options.json
+
+sed -i "s|^ControlUsername|#ControlUserName|g" /data/config/nzbget.conf
+sed -i "s|^ControlPassword|#ControlPassword|g" /data/config/nzbget.conf
+
+sed -i "s|^UpdateCheck=.*|UpdateCheck=none|g" /data/config/nzbget.conf
+sed -i "s|^AuthorizedIP=.*|AuthorizedIP=172.30.32.2|g" /data/config/nzbget.conf
