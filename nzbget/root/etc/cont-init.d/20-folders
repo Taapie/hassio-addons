@@ -1,6 +1,6 @@
 #!/usr/bin/with-contenv bash
 
-if [ ! -d /share/nzbget]; then
+if [ ! -d /share/nzbget ]; then
   echo "Creating /share/nzbget"
   mkdir -p /share/nzbget
 fi
