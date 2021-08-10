@@ -1,8 +1,8 @@
 #!/usr/bin/with-contenv bash
 
-if [ ! -d /share/nzbget/downloads ]; then
-  echo "Creating /share/nzbget/downloads"
-  mkdir -p /share/nzbget/downloads
+if [ ! -d /share/nzbget]; then
+  echo "Creating /share/nzbget"
+  mkdir -p /share/nzbget
 fi
 
 if [ ! -d /data/config ]; then

@@ -21,8 +21,8 @@ RUN apk add --no-cache \
 # Configure NZBGet for Hass.io
 RUN sed -i "s|/config|/data/config|g" /etc/services.d/nzbget/run \
     && sed -i "s|/config|/data/config|g" /etc/cont-init.d/30-config \
-    && sed -i "s|/downloads|/share/nzbget/downloads|g" /etc/cont-init.d/30-config \
-    && sed -i "s|/downloads|/share/nzbget/downloads|g" /app/nzbget/share/nzbget/nzbget.conf
+    && sed -i "s|/downloads|/share/nzbget|g" /etc/cont-init.d/30-config \
+    && sed -i "s|/downloads|/share/nzbget|g" /app/nzbget/share/nzbget/nzbget.conf
 
 # copy local files
 COPY root/ /
