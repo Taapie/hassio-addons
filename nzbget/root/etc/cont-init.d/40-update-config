@@ -1,4 +1,4 @@
-#!/usr/bin/with-contenv bash
+#!/usr/bin/with-contenv bashio
 CONFIG_PATH=/data/options.json
 
 sed -i "s|^ControlUsername|#ControlUsername|g" /data/config/nzbget.conf
@@ -6,3 +6,27 @@ sed -i "s|^ControlPassword|#ControlPassword|g" /data/config/nzbget.conf
 
 sed -i "s|^UpdateCheck=.*$|UpdateCheck=none|g" /data/config/nzbget.conf
 sed -i "s|^AuthorizedIP=.*$|AuthorizedIP=172.30.32.2|g" /data/config/nzbget.conf
+
+SERVER="$(bashio::config 'Server')"
+PORT="$(bashio::config 'Port')"
+USERNAME="$(bashio::config 'Username')"
+PASSWORD="$(bashio::config 'Password')"
+CONNECTIONS="$(bashio::config 'Connections')"
+SSL="$(bashio::config 'SSL')"
+RETENTION="$(bashio::config 'Retention')"
+
+sed -i "s|^Server1.Name=.*$|Server1.Name=$SERVER|g" /data/config/nzbget.conf
+sed -i "s|^Server1.Host=.*$|Server1.Host=$SERVER|g" /data/config/nzbget.conf
+sed -i "s|^Server1.Port=.*$|Server1.Port=$PORT|g" /data/config/nzbget.conf
+sed -i "s|^Server1.Username=.*$|Server1.Username=$USERNAME|g" /data/config/nzbget.conf
+sed -i "s|^Server1.Password=.*$|Server1.Password=$PASSWORD|g" /data/config/nzbget.conf
+
+sed -i "s|^Server1.Connections=.*$|Server1.Connections=$CONNECTIONS|g" /data/config/nzbget.conf
+
+if [[ "$SSL" == "true" ]]; then
+   sed -i "s|^Server1.Encryption=.*$|Server1.Encryption=yes|g" /data/config/nzbget.conf
+else
+   sed -i "s|^Server1.Encryption=.*$|Server1.Encryption=no|g" /data/config/nzbget.conf
+fi
+
+sed -i "s|^Server1.Retention=.*$|Server1.Retention=$RETENTION|g" /data/config/nzbget.conf

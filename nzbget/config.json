@@ -22,10 +22,24 @@
     "PGID": "1000"
   },
   "options": {
-    "TZ": "Europe/Amsterdam"
+    "TZ": "Europe/Amsterdam",
+    "Server": "news.eweka.nl",
+    "Port": 563,
+    "Username": "Taapie",
+    "Password": "Ju6U9oGy9Y4z8dfL",
+    "Connections": 20,
+    "SSL": true,
+    "Retention": 0
   },
   "schema": {
-    "TZ": "str?"
+    "TZ": "str?",
+    "Server": "str?",
+    "Port": "int?",
+    "Username": "str?",
+    "Password": "str?",
+    "Connections": "int?",
+    "SSL": "bool?",
+    "Retention": "int?"
   },
   "ingress": true,
   "ingress_port": 6789,
