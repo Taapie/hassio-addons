@@ -15,8 +15,21 @@ Example configuration:
 
 ```json
 {
-   "TZ": "Europe/London"
+   "TZ": "Europe/London",
+   "Server": "<server-url>",
+   "Port": 563,
+   "Username": "<username>",
+   "Password": "<password>",
+   "SSL": true,
+   "Connections": 20,
+   "Retention": 0
 }
 ```
 
 Using TZ you can set your own timezone, which is used in the scheduling options of NZBGet. You can find the available options for TZ on [Wikipedia](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) under the column 'TZ database name'.
+
+The settings Server, Port, Username, Password and SSL are used to configure the News Server from which you want to download the Usenet messages. 
+
+Connections needs to be set to the maximum number of connections that can be made simultaniously to the same server. 
+
+With Retention you can prevent the download of message that are no longer available on your News Server. Set it to the maximum retention that is available on your News Server - if you do not know the retention you can leave it set to 0.
