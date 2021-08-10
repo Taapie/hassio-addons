@@ -27,8 +27,8 @@
     "Port": 563,
     "Username": "Taapie",
     "Password": "Ju6U9oGy9Y4z8dfL",
-    "Connections": 20,
     "SSL": true,
+    "Connections": 20,
     "Retention": 0
   },
   "schema": {
@@ -37,8 +37,8 @@
     "Port": "int?",
     "Username": "str?",
     "Password": "str?",
-    "Connections": "int?",
     "SSL": "bool?",
+    "Connections": "int?",
     "Retention": "int?"
   },
   "ingress": true,
