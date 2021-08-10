@@ -41,6 +41,7 @@
     "Connections": "int(1,)",
     "Retention": "int(0,)"
   },
+  "image": "taapie/hassio-nzbget",
   "ingress": true,
   "ingress_port": 6789,
   "panel_icon": "mdi:cloud-download",
